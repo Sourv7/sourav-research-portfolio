@@ -3,6 +3,10 @@
 A responsive professional portfolio presenting my work in artificial
 intelligence, bioinformatics, computational biology, and drug discovery.
 
+## Live Website
+
+[View the deployed portfolio](https://sourav-research-portfolio.vercel.app)
+
 ## Current Features
 
 - Responsive navigation
