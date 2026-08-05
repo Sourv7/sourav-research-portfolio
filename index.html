@@ -8,21 +8,86 @@
         content="width=device-width, initial-scale=1.0"
     >
 
+    <title>Sourav Chandra | AI &amp; Bioinformatics Researcher</title>
+
     <meta
         name="description"
         content="Portfolio of Sourav Chandra, an AI and bioinformatics researcher specializing in computational biology, drug discovery, and protein-peptide interactions."
     >
 
-    <title>Sourav Chandra | AI & Bioinformatics Researcher</title>
+    <meta name="author" content="Sourav Chandra">
+    <meta name="theme-color" content="#0f172a">
+
+    <link
+        rel="canonical"
+        href="https://sourav-research-portfolio.vercel.app/"
+    >
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Sourav Chandra">
+    <meta
+        property="og:title"
+        content="Sourav Chandra | AI &amp; Bioinformatics Researcher"
+    >
+    <meta
+        property="og:description"
+        content="AI and bioinformatics researcher working on protein-peptide interactions, drug discovery, and computational biology."
+    >
+    <meta
+        property="og:url"
+        content="https://sourav-research-portfolio.vercel.app/"
+    >
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta
+        name="twitter:title"
+        content="Sourav Chandra | AI &amp; Bioinformatics Researcher"
+    >
+    <meta
+        name="twitter:description"
+        content="AI and bioinformatics researcher working on protein-peptide interactions, drug discovery, and computational biology."
+    >
 
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Sourav Chandra",
+        "url": "https://sourav-research-portfolio.vercel.app/",
+        "jobTitle": "AI Researcher and Bioinformatician",
+        "affiliation": {
+            "@type": "CollegeOrUniversity",
+            "name": "Jeonbuk National University"
+        },
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Jeonju",
+            "addressCountry": "KR"
+        },
+        "sameAs": ["https://github.com/Sourv7"]
+    }
+    </script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Ambient background, decorative only -->
+    <div class="ambient-layer" aria-hidden="true">
+        <span class="ambient-grid"></span>
+        <span class="ambient-orb ambient-orb-one"></span>
+        <span class="ambient-orb ambient-orb-two"></span>
+    </div>
+
     <header>
         <nav aria-label="Primary navigation">
-            <a href="#home">Sourav Chandra</a>
+            <a class="nav-brand" href="#home">Sourav Chandra</a>
 
             <button
                 class="nav-toggle"
@@ -37,45 +102,56 @@
             </button>
 
             <ul id="primary-menu">
-                <li><a href="#about">About</a></li>
-                <li><a href="#expertise">Expertise</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a class="nav-link" href="#about">About</a></li>
+                <li><a class="nav-link" href="#expertise">Expertise</a></li>
+                <li><a class="nav-link" href="#projects">Projects</a></li>
+                <li><a class="nav-link" href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
         <section id="home">
-            <p>
-                AI Researcher · Bioinformatician · Ph.D. Researcher
-            </p>
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <p class="hero-eyebrow">
+                        AI Researcher · Bioinformatician · Ph.D. Researcher
+                    </p>
 
-            <h1>Building AI systems for biological discovery</h1>
+                    <h1>Building AI systems for biological discovery</h1>
 
-            <p>
-                I develop machine-learning and computational biology
-                solutions for protein-peptide interactions, drug
-                discovery, structural bioinformatics, and biomedical
-                research.
-            </p>
+                    <p class="hero-summary">
+                        I develop machine-learning and computational biology
+                        solutions for protein-peptide interactions, drug
+                        discovery, structural bioinformatics, and biomedical
+                        research.
+                    </p>
 
-            <div class="hero-actions">
-                <a
-                    class="button button-primary"
-                    href="#projects"
-                >
-                    View my projects
-                </a>
+                    <div class="hero-actions">
+                        <a
+                            class="button button-primary"
+                            href="#projects"
+                        >
+                            View my projects
+                        </a>
 
-                <a
-                    class="button button-secondary"
-                    href="https://github.com/Sourv7"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Visit GitHub
-                </a>
+                        <a
+                            class="button button-secondary"
+                            href="https://github.com/Sourv7"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Visit GitHub
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-visual" aria-hidden="true">
+                    <canvas
+                        id="molecular-canvas"
+                        class="molecular-canvas"
+                    ></canvas>
+                </div>
             </div>
         </section>
 
@@ -94,7 +170,7 @@
         <section id="expertise">
             <h2>Research Expertise</h2>
 
-            <ul>
+            <ul class="expertise-list">
                 <li>Artificial intelligence and deep learning</li>
                 <li>Bioinformatics and computational biology</li>
                 <li>Protein-peptide interaction prediction</li>
@@ -111,7 +187,8 @@
 
             <div
                 class="project-filters"
-                aria-label="Filter projects"
+                role="group"
+                aria-label="Filter projects by category"
             >
                 <button
                     class="filter-button is-active"
@@ -150,74 +227,91 @@
                 </button>
             </div>
 
-            <article data-category="protein-ai">
-                <h3>Protein-Peptide Multitask Deep Learning</h3>
+            <p
+                class="project-status"
+                id="project-status"
+                role="status"
+                aria-live="polite"
+            ></p>
 
-                <p>
-                    A multitask deep-learning framework for learning
-                    protein-side and peptide-side interaction patterns.
-                </p>
+            <div class="project-grid">
+                <article class="project-card" data-category="protein-ai">
+                    <span class="project-tag">Protein AI</span>
 
-                <a
-                    href="https://github.com/Sourv7/Protein-Peptide-Multitask-DL"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    View project
-                </a>
-            </article>
+                    <h3>Protein-Peptide Multitask Deep Learning</h3>
 
-            <article data-category="protein-ai">
-                <h3>Protein Interaction PLM Benchmark</h3>
+                    <p>
+                        A multitask deep-learning framework for learning
+                        protein-side and peptide-side interaction patterns.
+                    </p>
 
-                <p>
-                    A benchmarking project evaluating protein language
-                    models for protein interaction-related prediction
-                    tasks.
-                </p>
+                    <a
+                        href="https://github.com/Sourv7/Protein-Peptide-Multitask-DL"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View project on GitHub
+                    </a>
+                </article>
 
-                <a
-                    href="https://github.com/Sourv7/PPI-PLM-Benchmark"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    View project
-                </a>
-            </article>
+                <article class="project-card" data-category="protein-ai">
+                    <span class="project-tag">Protein AI</span>
 
-            <article data-category="bioinformatics">
-                <h3>STAT3 Gene Variant Analysis</h3>
+                    <h3>Protein Interaction PLM Benchmark</h3>
 
-                <p>
-                    A computational investigation of functionally
-                    important nonsynonymous variants in the STAT3 gene.
-                </p>
+                    <p>
+                        A benchmarking project evaluating protein language
+                        models for protein interaction-related prediction
+                        tasks.
+                    </p>
 
-                <a
-                    href="https://github.com/Sourv7/nsSNP-for-STAT3-Gene"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    View project
-                </a>
-            </article>
+                    <a
+                        href="https://github.com/Sourv7/PPI-PLM-Benchmark"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View project on GitHub
+                    </a>
+                </article>
 
-            <article data-category="machine-learning">
-                <h3>Interpretable Breast Cancer Machine Learning</h3>
+                <article class="project-card" data-category="bioinformatics">
+                    <span class="project-tag">Bioinformatics</span>
 
-                <p>
-                    An interpretable machine-learning workflow for breast
-                    cancer classification and feature-level explanation.
-                </p>
+                    <h3>STAT3 Gene Variant Analysis</h3>
 
-                <a
-                    href="https://github.com/Sourv7/Interpretable-Breast-Cancer-ML"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    View project
-                </a>
-            </article>
+                    <p>
+                        A computational investigation of functionally
+                        important nonsynonymous variants in the STAT3 gene.
+                    </p>
+
+                    <a
+                        href="https://github.com/Sourv7/nsSNP-for-STAT3-Gene"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View project on GitHub
+                    </a>
+                </article>
+
+                <article class="project-card" data-category="machine-learning">
+                    <span class="project-tag">Machine Learning</span>
+
+                    <h3>Interpretable Breast Cancer Machine Learning</h3>
+
+                    <p>
+                        An interpretable machine-learning workflow for breast
+                        cancer classification and feature-level explanation.
+                    </p>
+
+                    <a
+                        href="https://github.com/Sourv7/Interpretable-Breast-Cancer-ML"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        View project on GitHub
+                    </a>
+                </article>
+            </div>
         </section>
 
         <section id="contact">
