@@ -32,8 +32,13 @@ body {
     background: var(--color-background);
     color: var(--color-text);
     font-family:
-        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
     font-size: 16px;
     line-height: 1.7;
 }
@@ -47,7 +52,8 @@ a:hover {
     color: var(--color-primary-dark);
 }
 
-a:focus-visible {
+a:focus-visible,
+button:focus-visible {
     outline: 3px solid #93c5fd;
     outline-offset: 4px;
 }
@@ -96,6 +102,45 @@ nav li a {
 
 nav li a:hover {
     color: var(--color-primary);
+}
+
+/* ---------- Mobile navigation button ---------- */
+
+.nav-toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nav-toggle span {
+    width: 24px;
+    height: 2px;
+    background: var(--color-heading);
+    border-radius: 2px;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 /* ---------- Shared section layout ---------- */
@@ -157,30 +202,37 @@ h3 {
     font-size: 1.15rem;
 }
 
-#home > a {
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.button {
     display: inline-block;
-    margin: 0 12px 12px 0;
     padding: 12px 22px;
     border: 2px solid var(--color-primary);
     border-radius: 10px;
     font-weight: 700;
+
     transition:
         background-color 0.2s ease,
+        border-color 0.2s ease,
         color 0.2s ease,
         transform 0.2s ease;
 }
 
-#home > a:first-of-type {
+.button-primary {
     background: var(--color-primary);
     color: white;
 }
 
-#home > a:last-of-type {
+.button-secondary {
     background: transparent;
     color: var(--color-primary);
 }
 
-#home > a:hover {
+.button:hover {
     background: var(--color-primary-dark);
     border-color: var(--color-primary-dark);
     color: white;
@@ -190,6 +242,7 @@ h3 {
 /* ---------- About section ---------- */
 
 #about {
+    width: min(calc(100% - 32px), var(--page-width));
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
@@ -223,14 +276,16 @@ h3 {
     position: absolute;
     top: 26px;
     left: 22px;
+
     width: 10px;
     height: 10px;
+
     background: var(--color-primary);
     border-radius: 50%;
     content: "";
 }
 
-/* ---------- Project cards ---------- */
+/* ---------- Projects ---------- */
 
 #projects {
     display: grid;
@@ -240,17 +295,65 @@ h3 {
 
 #projects h2 {
     grid-column: 1 / -1;
+    margin-bottom: 4px;
 }
+
+/* ---------- Project filters ---------- */
+
+.project-filters {
+    grid-column: 1 / -1;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-bottom: 8px;
+}
+
+.filter-button {
+    padding: 10px 18px;
+
+    background: var(--color-surface);
+    color: var(--color-text);
+
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.filter-button:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.filter-button.is-active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+/* ---------- Project cards ---------- */
 
 #projects article {
     display: flex;
     min-height: 270px;
     padding: 30px;
+
     background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-small);
+
     flex-direction: column;
+
     transition:
         box-shadow 0.2s ease,
         transform 0.2s ease;
@@ -270,12 +373,19 @@ h3 {
     font-weight: 800;
 }
 
+#projects article[hidden] {
+    display: none;
+}
+
 /* ---------- Contact section ---------- */
 
 #contact {
+    width: min(calc(100% - 32px), var(--page-width));
     margin-bottom: 80px;
+
     background: var(--color-heading);
     color: #cbd5e1;
+
     border-radius: var(--border-radius);
 }
 
@@ -292,10 +402,16 @@ h3 {
     display: inline-block;
     margin-top: 16px;
     padding: 12px 20px;
+
     background: var(--color-primary);
     color: white;
+
     border-radius: 10px;
     font-weight: 700;
+}
+
+#contact a:hover {
+    background: var(--color-primary-dark);
 }
 
 /* ---------- Footer ---------- */
@@ -307,54 +423,13 @@ footer {
     text-align: center;
 }
 
-/* ---------- Mobile navigation button ---------- */
-
-.nav-toggle {
-    display: none;
-    width: 44px;
-    height: 44px;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.nav-toggle span {
-    width: 24px;
-    height: 2px;
-    background: var(--color-heading);
-    border-radius: 2px;
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
-}
-
-.nav-toggle:focus-visible {
-    outline: 3px solid #93c5fd;
-    outline-offset: 3px;
-}
-
-.nav-toggle[aria-expanded="true"] span:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-
-.nav-toggle[aria-expanded="true"] span:nth-child(2) {
-    opacity: 0;
-}
-
-.nav-toggle[aria-expanded="true"] span:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
-}
-
 /* ---------- Responsive design ---------- */
 
 @media (max-width: 720px) {
     nav {
         min-height: 72px;
         padding: 0 20px;
+
         flex-direction: row;
         flex-wrap: wrap;
         gap: 0;
@@ -368,6 +443,7 @@ footer {
         display: none;
         width: 100%;
         padding: 8px 0 16px;
+
         flex-direction: column;
         align-items: stretch;
         gap: 0;
@@ -398,12 +474,26 @@ footer {
         padding-bottom: 90px;
     }
 
+    #home h1 {
+        font-size: clamp(2.4rem, 12vw, 3.4rem);
+    }
+
+    .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
     #expertise ul,
     #projects {
         grid-template-columns: 1fr;
     }
 
-    #projects h2 {
+    #projects h2,
+    .project-filters {
         grid-column: auto;
+    }
+
+    #projects article {
+        min-height: auto;
     }
 }

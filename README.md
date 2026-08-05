@@ -16,6 +16,8 @@ intelligence, bioinformatics, computational biology, and drug discovery.
 - Contact section
 - Automatically updated copyright year
 - Mobile-responsive layout
+- Accessible mobile navigation menu
+- Interactive project-category filtering
 
 ## Technologies
 
@@ -30,8 +32,6 @@ Open `index.html` in a web browser.
 
 ## Planned Improvements
 
-- Mobile navigation menu
-- Project filtering
 - Research publications section
 - Contact form
 - Dark-mode option
