@@ -50,11 +50,27 @@
     }
 
     /** A section with a heading, appended only when it has content. */
-    function section(id, heading) {
-        var wrapper = element("section", "case-section");
+    function section(id, heading, modifier) {
+        var wrapper = element(
+            "section",
+            "case-section" + (modifier ? " " + modifier : "")
+        );
+
         wrapper.id = id;
         wrapper.appendChild(element("h2", null, heading));
+
         return wrapper;
+    }
+
+    /** An ordered list, for anything that is genuinely a sequence. */
+    function numberedList(items) {
+        var list = element("ol", "case-steps");
+
+        items.forEach(function (item) {
+            list.appendChild(element("li", null, item));
+        });
+
+        return list;
     }
 
     function bulletList(items, className) {
@@ -403,6 +419,28 @@
        ------------------------------------------------------------------ */
 
     function renderProject(project, index) {
+        // The canvas engine in script.js reads this attribute to choose a
+        // structure. Set before that file runs, so each case study shows a
+        // visual that depicts its own subject.
+        var canvas = document.querySelector("#molecular-canvas");
+
+        if (canvas && project.visual) {
+            canvas.dataset.shape = project.visual;
+        }
+
+        // Each case study takes one of two accents. Both clear 4.5:1 against
+        // the page background, so the colour never carries meaning that the
+        // text does not also carry.
+        var ACCENTS = {
+            primary: "37, 99, 235",
+            violet: "124, 58, 237"
+        };
+
+        document.documentElement.style.setProperty(
+            "--case-accent-rgb",
+            ACCENTS[project.accent] || ACCENTS.primary
+        );
+
         article.appendChild(renderHeader(project));
 
         var body = element("div", "case-body");
@@ -420,20 +458,26 @@
         }
 
         if (isFilledArray(project.objectives)) {
-            var objectives = section("objectives", "Research Objectives");
+            var objectives = section(
+                "objectives", "Research Objectives", "case-section-split"
+            );
             objectives.appendChild(bulletList(project.objectives));
             body.appendChild(objectives);
         }
 
         if (isFilledArray(project.dataset)) {
-            var dataset = section("dataset", "Dataset and Input Data");
-            dataset.appendChild(bulletList(project.dataset));
+            var dataset = section(
+                "dataset", "Dataset and Input Data", "case-section-panel"
+            );
+            dataset.appendChild(bulletList(project.dataset, "case-list case-list-tight"));
             body.appendChild(dataset);
         }
 
+        // Methodology is a sequence, so it is an ordered list rather than a
+        // fourth identical set of bullets.
         if (isFilledArray(project.methodology)) {
             var methodology = section("methodology", "Methodology");
-            methodology.appendChild(bulletList(project.methodology));
+            methodology.appendChild(numberedList(project.methodology));
             body.appendChild(methodology);
         }
 
@@ -449,13 +493,17 @@
         }
 
         if (isFilledArray(project.limitations)) {
-            var limitations = section("limitations", "Limitations");
+            var limitations = section(
+                "limitations", "Limitations", "case-section-caution"
+            );
             limitations.appendChild(bulletList(project.limitations));
             body.appendChild(limitations);
         }
 
         if (isFilledArray(project.futureWork)) {
-            var future = section("future-work", "Future Work");
+            var future = section(
+                "future-work", "Future Work", "case-section-split"
+            );
             future.appendChild(bulletList(project.futureWork));
             body.appendChild(future);
         }
@@ -476,7 +524,46 @@
             body.appendChild(repository);
         }
 
-        article.appendChild(body);
+        // A contents rail, built from whatever sections actually rendered.
+        // Desktop only: CSS hides it where there is no room for a second
+        // column, so nothing is duplicated on a phone.
+        var layout = element("div", "case-layout");
+        var contents = element("aside", "case-contents");
+        var contentsNav = element("nav");
+
+        contentsNav.setAttribute("aria-label", "Sections of this case study");
+        contentsNav.appendChild(element("h2", "case-contents-title", "On this page"));
+
+        var contentsList = element("ol");
+
+        Array.prototype.forEach.call(
+            body.querySelectorAll(".case-section"),
+            function (node) {
+                var heading = node.querySelector("h2");
+
+                if (!heading || !node.id) {
+                    return;
+                }
+
+                var item = document.createElement("li");
+                var link = element("a", null, heading.textContent);
+
+                link.href = "#" + node.id;
+                item.appendChild(link);
+                contentsList.appendChild(item);
+            }
+        );
+
+        contentsNav.appendChild(contentsList);
+        contents.appendChild(contentsNav);
+
+        layout.appendChild(body);
+
+        if (contentsList.childNodes.length > 2) {
+            layout.appendChild(contents);
+        }
+
+        article.appendChild(layout);
 
         var pager = renderPager(index);
         if (pager) {

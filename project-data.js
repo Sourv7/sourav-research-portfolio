@@ -8,6 +8,10 @@
  * Field reference
  *   id               URL slug: project.html?id=<id>
  *   filterCategory   maps to the homepage filter buttons in index.html
+ *   visual           canvas structure for the case-study page. One of
+ *                    molecule, network, duplex, stack, helix, scatter.
+ *   accent           primary or violet. Only these two, because both
+ *                    clear 4.5:1 against the page background as text.
  *   category         display categories shown as chips
  *   results          array of either strings or { heading, note, items }
  *   Optional fields (githubUrl, publicationUrl, doi, demoUrl, image) are
@@ -23,6 +27,9 @@
 window.PORTFOLIO_PROJECTS = [
     {
         id: "nsclc-drug-discovery",
+        // Case-study canvas: compound-target hubs with their satellites.
+        visual: "network",
+        accent: "primary",
         title:
             "Exploring Nigella sativa Anticancer Properties for " +
             "Non-Small Cell Lung Cancer",
@@ -131,6 +138,9 @@ window.PORTFOLIO_PROJECTS = [
 
     {
         id: "protein-peptide-multitask",
+        // Case-study canvas: two sequences with cross-attention links between them.
+        visual: "duplex",
+        accent: "violet",
         title:
             "Interaction-Aware Multitask Learning for Protein–Peptide " +
             "Binding-Site Prediction",
@@ -243,6 +253,9 @@ window.PORTFOLIO_PROJECTS = [
 
     {
         id: "ppi-plm-benchmark",
+        // Case-study canvas: parallel model layers compared under one protocol.
+        visual: "stack",
+        accent: "primary",
         // Title follows the repository, which benchmarks protein–PEPTIDE
         // interaction tasks. See the notes in README.md.
         title:
@@ -337,6 +350,9 @@ window.PORTFOLIO_PROJECTS = [
 
     {
         id: "stat3-variant-analysis",
+        // Case-study canvas: an alpha helix with marked residue positions.
+        visual: "helix",
+        accent: "violet",
         title:
             "Structural and Dynamic Analysis of Functional STAT3 " +
             "SH2-Domain Variants",
@@ -451,6 +467,9 @@ window.PORTFOLIO_PROJECTS = [
 
     {
         id: "breast-cancer-ml",
+        // Case-study canvas: two separable clusters.
+        visual: "scatter",
+        accent: "primary",
         title: "Interpretable Machine Learning for Breast Cancer Classification",
         shortTitle: "Interpretable Breast Cancer ML",
         status: "Open-Source Machine Learning Project",

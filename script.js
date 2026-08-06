@@ -1236,6 +1236,7 @@
         var animationHandle = null;
         var lastTimestamp = 0;
         var isOnScreen = true;
+        var builtForCount = -1;
 
         /* ---------- Build ---------- */
 
@@ -1251,30 +1252,246 @@
             return 54;
         }
 
-        function buildNodes(nodeCount) {
+        /* ---------- Structure generators ----------
+           Each returns { nodes, bonds } in a unit-ish coordinate space. The
+           projection, depth sort, lighting, and animation loop are shared, so
+           adding a shape costs a generator and nothing else.
+
+           A shape is chosen per page with data-shape on the canvas, which
+           lets each case study show a structure that depicts its own subject
+           rather than a generic sphere. */
+
+        function node(x, y, z, radius, colorIndex) {
+            return { x: x, y: y, z: z, radius: radius, colorIndex: colorIndex };
+        }
+
+        /** Fibonacci sphere. The homepage default: a general molecule. */
+        function shapeMolecule(count) {
             var goldenAngle = Math.PI * (3 - Math.sqrt(5));
-            var built = [];
+            var nodes = [];
             var index;
 
-            for (index = 0; index < nodeCount; index += 1) {
-                var y = 1 - (index / (nodeCount - 1)) * 2;
+            for (index = 0; index < count; index += 1) {
+                var y = 1 - (index / (count - 1)) * 2;
                 var ringRadius = Math.sqrt(Math.max(0, 1 - y * y));
                 var theta = goldenAngle * index;
-
-                // Alternate shells so the cloud reads as a volume rather than
-                // a hollow sphere.
                 var shell = index % 3 === 0 ? 0.58 : 1;
 
-                built.push({
-                    x: Math.cos(theta) * ringRadius * shell,
-                    y: y * shell,
-                    z: Math.sin(theta) * ringRadius * shell,
-                    radius: index % 5 === 0 ? 3.1 : 2.2,
-                    colorIndex: index % NODE_COLORS.length
+                nodes.push(node(
+                    Math.cos(theta) * ringRadius * shell,
+                    y * shell,
+                    Math.sin(theta) * ringRadius * shell,
+                    index % 5 === 0 ? 3.1 : 2.2,
+                    index % NODE_COLORS.length
+                ));
+            }
+
+            return { nodes: nodes, bonds: null };
+        }
+
+        /** Hubs with satellites: a compound-target interaction network. */
+        function shapeNetwork(count) {
+            var hubCount = 3;
+            var nodes = [];
+            var bonds = [];
+            var index;
+
+            for (index = 0; index < hubCount; index += 1) {
+                var angle = (index / hubCount) * Math.PI * 2;
+
+                nodes.push(node(
+                    Math.cos(angle) * 0.42,
+                    Math.sin(angle) * 0.30,
+                    Math.sin(angle * 1.7) * 0.28,
+                    4.4,
+                    index % NODE_COLORS.length
+                ));
+            }
+
+            for (index = hubCount; index < count; index += 1) {
+                var hub = index % hubCount;
+                var spread = 0.55 + ((index * 37) % 40) / 100;
+                var a = index * 2.399;
+                var b = index * 1.117;
+
+                nodes.push(node(
+                    nodes[hub].x + Math.cos(a) * Math.sin(b) * spread,
+                    nodes[hub].y + Math.sin(a) * Math.sin(b) * spread,
+                    nodes[hub].z + Math.cos(b) * spread,
+                    2.0,
+                    hub % NODE_COLORS.length
+                ));
+
+                bonds.push({ from: hub, to: index, strength: 0.85 });
+            }
+
+            for (index = 0; index < hubCount; index += 1) {
+                bonds.push({
+                    from: index,
+                    to: (index + 1) % hubCount,
+                    strength: 1
                 });
             }
 
-            return built;
+            return { nodes: nodes, bonds: bonds };
+        }
+
+        /** Two strands with rungs between them: an interacting pair. */
+        function shapeDuplex(count) {
+            var perStrand = Math.floor(count / 2);
+            var nodes = [];
+            var bonds = [];
+            var index;
+
+            for (index = 0; index < perStrand; index += 1) {
+                var t = index / (perStrand - 1);
+                var y = t * 2 - 1;
+                var twist = t * Math.PI * 2.4;
+
+                nodes.push(node(
+                    Math.cos(twist) * 0.30 - 0.42, y,
+                    Math.sin(twist) * 0.30, 2.4, 0
+                ));
+                nodes.push(node(
+                    Math.cos(twist + Math.PI) * 0.30 + 0.42, y,
+                    Math.sin(twist + Math.PI) * 0.30, 2.4, 1
+                ));
+
+                var a = index * 2;
+                var b = index * 2 + 1;
+
+                if (index > 0) {
+                    bonds.push({ from: a - 2, to: a, strength: 1 });
+                    bonds.push({ from: b - 2, to: b, strength: 1 });
+                }
+
+                // Cross-links: the attention between the two sequences.
+                if (index % 2 === 0) {
+                    bonds.push({ from: a, to: b, strength: 0.5 });
+                }
+            }
+
+            return { nodes: nodes, bonds: bonds };
+        }
+
+        /** Parallel layers: several models under one protocol. */
+        function shapeStack(count) {
+            var layers = 4;
+            var perLayer = Math.max(4, Math.floor(count / layers));
+            var nodes = [];
+            var bonds = [];
+            var layer;
+            var index;
+
+            for (layer = 0; layer < layers; layer += 1) {
+                var y = (layer / (layers - 1)) * 1.6 - 0.8;
+
+                for (index = 0; index < perLayer; index += 1) {
+                    var angle = (index / perLayer) * Math.PI * 2 + layer * 0.4;
+                    var current = layer * perLayer + index;
+
+                    nodes.push(node(
+                        Math.cos(angle) * 0.72, y,
+                        Math.sin(angle) * 0.72,
+                        2.3, layer % NODE_COLORS.length
+                    ));
+
+                    if (index > 0) {
+                        bonds.push({ from: current - 1, to: current, strength: 0.9 });
+                    }
+
+                    if (index === perLayer - 1) {
+                        bonds.push({
+                            from: current,
+                            to: layer * perLayer,
+                            strength: 0.9
+                        });
+                    }
+
+                    if (layer > 0 && index % 2 === 0) {
+                        bonds.push({
+                            from: current - perLayer,
+                            to: current,
+                            strength: 0.45
+                        });
+                    }
+                }
+            }
+
+            return { nodes: nodes, bonds: bonds };
+        }
+
+        /** An alpha helix with a few residues marked: a protein domain. */
+        function shapeHelix(count) {
+            var nodes = [];
+            var bonds = [];
+            var index;
+
+            for (index = 0; index < count; index += 1) {
+                var t = index / (count - 1);
+                var angle = t * Math.PI * 7;
+                var marked = index % 7 === 3;
+
+                nodes.push(node(
+                    Math.cos(angle) * 0.62,
+                    t * 1.9 - 0.95,
+                    Math.sin(angle) * 0.62,
+                    marked ? 4.0 : 2.1,
+                    marked ? 2 : 0
+                ));
+
+                if (index > 0) {
+                    bonds.push({ from: index - 1, to: index, strength: 1 });
+                }
+
+                // Hydrogen-bond style turn-to-turn contacts.
+                if (index > 4) {
+                    bonds.push({ from: index - 4, to: index, strength: 0.35 });
+                }
+            }
+
+            return { nodes: nodes, bonds: bonds };
+        }
+
+        /** Two separated clusters: a binary classification. */
+        function shapeScatter(count) {
+            var nodes = [];
+            var index;
+
+            for (index = 0; index < count; index += 1) {
+                var malignant = index % 2 === 0;
+                var a = index * 2.399;
+                var b = index * 1.31;
+                var spread = 0.30 + ((index * 53) % 30) / 100;
+
+                nodes.push(node(
+                    (malignant ? -0.46 : 0.46) + Math.cos(a) * Math.sin(b) * spread,
+                    Math.sin(a) * Math.sin(b) * spread * 1.3,
+                    Math.cos(b) * spread,
+                    2.4,
+                    malignant ? 0 : 1
+                ));
+            }
+
+            // No explicit bonds: distance-based linking keeps each cluster
+            // internally connected and leaves the gap between them visible.
+            return { nodes: nodes, bonds: null };
+        }
+
+        var SHAPES = {
+            molecule: shapeMolecule,
+            network: shapeNetwork,
+            duplex: shapeDuplex,
+            stack: shapeStack,
+            helix: shapeHelix,
+            scatter: shapeScatter
+        };
+
+        function buildStructure(nodeCount) {
+            var name = canvas.dataset.shape || "molecule";
+            var generator = SHAPES[name] || SHAPES.molecule;
+
+            return generator(nodeCount);
         }
 
         function buildBonds(nodeList) {
@@ -1356,12 +1573,19 @@
         function buildScene() {
             var nodeCount = chooseNodeCount(cssWidth || 320);
 
-            if (nodes.length === nodeCount) {
+            if (builtForCount === nodeCount) {
                 return;
             }
 
-            nodes = buildNodes(nodeCount);
-            bonds = buildBonds(nodes);
+            builtForCount = nodeCount;
+
+            var structure = buildStructure(nodeCount);
+
+            nodes = structure.nodes;
+            // A generator may define its own connectivity; otherwise fall back
+            // to distance-based bonding.
+            bonds = structure.bonds || buildBonds(nodes);
+            nodeCount = nodes.length;
 
             // Typed arrays are allocated once, never inside the frame loop.
             projectedX = new Float32Array(nodeCount);
@@ -1475,7 +1699,12 @@
                     continue;
                 }
 
-                context.strokeStyle = "rgba(37, 99, 235, " + alpha.toFixed(3) + ")";
+                var bondColor = NODE_COLORS[nodes[bond.from].colorIndex] ||
+                    NODE_COLORS[0];
+
+                context.strokeStyle =
+                    "rgba(" + bondColor[0] + ", " + bondColor[1] + ", " +
+                    bondColor[2] + ", " + alpha.toFixed(3) + ")";
                 context.lineWidth = Math.max(0.4, averageScale * 0.9);
 
                 context.beginPath();

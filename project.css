@@ -75,10 +75,10 @@
 .case-status {
     padding: 5px 14px;
 
-    background: rgba(var(--primary-rgb), 0.08);
-    color: var(--color-primary);
+    background: rgba(var(--case-accent-rgb, var(--primary-rgb)), 0.08);
+    color: rgb(var(--case-accent-rgb, var(--primary-rgb)));
 
-    border: 1px solid rgba(var(--primary-rgb), 0.20);
+    border: 1px solid rgba(var(--case-accent-rgb, var(--primary-rgb)), 0.22);
     border-radius: var(--border-radius-pill);
 
     font-size: 0.74rem;
@@ -216,7 +216,7 @@ a:focus-visible .case-arrow {
 
     background: linear-gradient(
         135deg,
-        var(--color-primary),
+        rgb(var(--case-accent-rgb, var(--primary-rgb))),
         var(--color-accent-cyan)
     );
     border-radius: 50%;
@@ -374,6 +374,189 @@ a:focus-visible .case-arrow {
 }
 
 
+
+/* ==========================================================================
+   Two-column layout with a contents rail
+   ========================================================================== */
+
+.case-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+}
+
+.case-contents {
+    display: none;
+}
+
+@media (min-width: 1080px) {
+    .case-layout {
+        grid-template-columns: minmax(0, 1fr) 210px;
+        align-items: start;
+    }
+
+    .case-contents {
+        position: sticky;
+        top: calc(var(--header-height) + 24px);
+        display: block;
+    }
+}
+
+.case-contents-title {
+    margin-bottom: 12px;
+
+    color: var(--color-text-muted);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.case-contents ol {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    padding-left: 14px;
+    border-left: 2px solid var(--color-border);
+    list-style: none;
+}
+
+.case-contents a {
+    display: block;
+    padding: 5px 0;
+
+    color: var(--color-text-muted);
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.case-contents a:hover,
+.case-contents a:focus-visible {
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   Section variants
+   --------------------------------------------------------------------------
+   Sections are deliberately not uniform. A numbered heading gives the page a
+   spine, and three variants stop five consecutive bullet lists reading as one
+   undifferentiated block.
+   ========================================================================== */
+
+.case-body {
+    counter-reset: case-section;
+}
+
+.case-section > h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.case-section > h2::before {
+    counter-increment: case-section;
+    content: counter(case-section, decimal-leading-zero);
+
+    color: rgba(var(--case-accent-rgb, var(--primary-rgb)), 0.42);
+    font-size: 0.78em;
+    font-variant-numeric: tabular-nums;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+}
+
+/* Two columns of short items, where the list is a set rather than a flow. */
+@media (min-width: 860px) {
+    .case-section-split .case-list {
+        column-count: 2;
+        column-gap: 40px;
+        max-width: none;
+    }
+
+    .case-section-split .case-list li {
+        break-inside: avoid;
+        margin-bottom: 10px;
+    }
+}
+
+/* A panel, for reference material the reader scans rather than reads. */
+.case-section-panel .case-list {
+    max-width: none;
+    padding: 22px 26px;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+}
+
+.case-list-tight {
+    gap: 8px;
+}
+
+/* Caveats get a distinct treatment so they are not mistaken for findings. */
+.case-section-caution .case-list {
+    max-width: none;
+    padding: 20px 24px;
+
+    background: rgba(var(--accent-violet-rgb), 0.04);
+    border-left: 3px solid rgba(var(--accent-violet-rgb), 0.35);
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.case-section-caution .case-list li::before {
+    background: rgba(var(--accent-violet-rgb), 0.55);
+}
+
+/* Methodology as an ordered sequence. */
+.case-steps {
+    display: grid;
+    gap: 10px;
+    max-width: 860px;
+    padding-left: 0;
+    counter-reset: case-step;
+    list-style: none;
+}
+
+.case-steps li {
+    position: relative;
+    padding-left: 42px;
+    overflow-wrap: break-word;
+}
+
+.case-steps li::before {
+    position: absolute;
+    top: 2px;
+    left: 0;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
+    background: rgba(var(--case-accent-rgb, var(--primary-rgb)), 0.08);
+    color: rgb(var(--case-accent-rgb, var(--primary-rgb)));
+
+    border-radius: 50%;
+    counter-increment: case-step;
+    content: counter(case-step);
+
+    font-size: 0.76rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 860px) {
+    .case-steps {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 40px;
+        max-width: none;
+    }
+}
+
 /* ==========================================================================
    Molecular band
    --------------------------------------------------------------------------
@@ -386,7 +569,7 @@ a:focus-visible .case-arrow {
     position: relative;
 
     width: 100%;
-    height: 190px;
+    height: 230px;
     margin-bottom: 12px;
 
     overflow: hidden;
