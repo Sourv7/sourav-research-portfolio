@@ -1,0 +1,609 @@
+/* ==========================================================================
+   Case-study page
+   --------------------------------------------------------------------------
+   Uses only the tokens already declared in styles.css: the same colours,
+   spacing rhythm, radii, shadows, and transitions. Nothing here introduces a
+   new palette or a second visual language.
+   ========================================================================== */
+
+/* .visually-hidden lives in styles.css, which loads before this file. */
+
+.case-page main {
+    width: min(var(--page-width), 100%);
+    margin: 0 auto;
+    padding: 32px 24px 96px;
+}
+
+/* ==========================================================================
+   Breadcrumb
+   ========================================================================== */
+
+.breadcrumb {
+    margin-bottom: 28px;
+}
+
+.breadcrumb ol {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    list-style: none;
+}
+
+.breadcrumb li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+}
+
+.breadcrumb li + li::before {
+    color: var(--color-border);
+    content: "/";
+}
+
+.breadcrumb a {
+    font-weight: 600;
+}
+
+.breadcrumb [aria-current="page"] {
+    color: var(--color-heading);
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+.case-header {
+    margin-bottom: 44px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.case-header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+/* Status is a word, not a colour, so it stays legible in greyscale. */
+.case-status {
+    padding: 5px 14px;
+
+    background: rgba(var(--primary-rgb), 0.08);
+    color: var(--color-primary);
+
+    border: 1px solid rgba(var(--primary-rgb), 0.20);
+    border-radius: var(--border-radius-pill);
+
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.case-title {
+    margin-bottom: 20px;
+    font-size: clamp(1.9rem, 3.6vw, 3rem);
+    letter-spacing: -0.03em;
+}
+
+.case-summary {
+    max-width: 760px;
+    margin-bottom: 18px;
+    font-size: 1.12rem;
+}
+
+.case-role {
+    margin-bottom: 20px;
+    color: var(--color-text-muted);
+}
+
+.case-role-label {
+    color: var(--color-heading);
+    font-weight: 700;
+}
+
+.case-categories,
+.case-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+}
+
+.case-categories {
+    margin-bottom: 28px;
+}
+
+.case-chip {
+    display: inline-block;
+    padding: 5px 13px;
+
+    background: var(--color-surface);
+    color: var(--color-text);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-pill);
+
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.case-tech .case-chip {
+    background: rgba(var(--accent-cyan-rgb), 0.06);
+    border-color: rgba(var(--accent-cyan-rgb), 0.22);
+}
+
+.case-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.case-actions .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+}
+
+/* Shared arrow used by every forward-moving link. */
+.case-arrow {
+    display: inline-block;
+    transition: transform var(--transition-fast);
+}
+
+a:hover .case-arrow,
+a:focus-visible .case-arrow {
+    transform: translateX(3px);
+}
+
+/* ==========================================================================
+   Sections
+   ========================================================================== */
+
+.case-body {
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+}
+
+.case-section {
+    min-width: 0;
+    scroll-margin-top: calc(var(--header-height) + 16px);
+}
+
+.case-section > h2 {
+    margin-bottom: 18px;
+    font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+}
+
+.case-section h3 {
+    margin-bottom: 10px;
+    font-size: 1.05rem;
+}
+
+.case-section p {
+    max-width: 780px;
+}
+
+.case-list {
+    display: grid;
+    gap: 10px;
+    max-width: 860px;
+    list-style: none;
+}
+
+.case-list li {
+    position: relative;
+    padding-left: 26px;
+    overflow-wrap: break-word;
+}
+
+.case-list li::before {
+    position: absolute;
+    top: 11px;
+    left: 4px;
+
+    width: 7px;
+    height: 7px;
+
+    background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-accent-cyan)
+    );
+    border-radius: 50%;
+    content: "";
+}
+
+/* A qualifier attached to a set of numbers. Deliberately prominent: it is
+   what stops a reader taking a demonstration metric for a benchmark result. */
+.case-note {
+    max-width: 780px;
+    margin-bottom: 16px;
+    padding: 14px 18px;
+
+    background: rgba(var(--accent-violet-rgb), 0.05);
+    color: var(--color-text);
+
+    border-left: 3px solid rgba(var(--accent-violet-rgb), 0.45);
+    border-radius: 0 var(--border-radius-small) var(--border-radius-small) 0;
+
+    font-size: 0.92rem;
+}
+
+/* ==========================================================================
+   Results
+   ========================================================================== */
+
+.case-result-group + .case-result-group {
+    margin-top: 32px;
+}
+
+.case-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.case-metric {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 18px;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    box-shadow: var(--shadow-small);
+}
+
+.case-metric-label {
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    overflow-wrap: break-word;
+}
+
+.case-metric-value {
+    margin: 0;
+
+    color: var(--color-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+/* ==========================================================================
+   Workflow
+   --------------------------------------------------------------------------
+   An ordered list. Vertical on narrow screens, wrapping horizontally on wide
+   ones. Connectors are decorative pseudo-elements, so the reading order and
+   the numbering come from the markup.
+   ========================================================================== */
+
+.workflow-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: none;
+}
+
+.workflow-step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 14px 18px;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-small);
+    box-shadow: var(--shadow-small);
+
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+.workflow-step:hover {
+    border-color: rgba(var(--primary-rgb), 0.30);
+    box-shadow: var(--shadow-medium);
+}
+
+.workflow-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+
+    width: 26px;
+    height: 26px;
+
+    background: rgba(var(--primary-rgb), 0.08);
+    color: var(--color-primary);
+
+    border-radius: 50%;
+    font-size: 0.78rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.workflow-step-label {
+    min-width: 0;
+    font-size: 0.94rem;
+    font-weight: 600;
+    overflow-wrap: break-word;
+}
+
+@media (min-width: 720px) {
+    .workflow-steps {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px 26px;
+    }
+
+    .workflow-step {
+        flex: 1 1 auto;
+        max-width: 100%;
+    }
+
+    /* Connector between adjacent steps on the same row. */
+    .workflow-step:not(:last-child)::after {
+        position: absolute;
+        top: 50%;
+        right: -19px;
+
+        color: var(--color-border);
+        content: "\2192";
+        font-size: 1rem;
+        line-height: 1;
+
+        transform: translateY(-50%);
+    }
+}
+
+/* ==========================================================================
+   Citation and repository
+   ========================================================================== */
+
+.case-citation {
+    max-width: 780px;
+    padding: 24px;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+}
+
+.case-citation-title {
+    margin-bottom: 10px;
+    color: var(--color-heading);
+    font-weight: 700;
+    line-height: 1.45;
+}
+
+.case-citation-source {
+    margin-bottom: 4px;
+    font-size: 0.92rem;
+}
+
+.case-citation-source cite {
+    color: var(--color-heading);
+    font-style: normal;
+    font-weight: 700;
+}
+
+.case-citation-doi {
+    margin-bottom: 16px;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+}
+
+.case-citation-link,
+.case-repository-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    font-weight: 800;
+}
+
+/* ==========================================================================
+   Previous / next
+   ========================================================================== */
+
+.case-pager {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 16px;
+
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--color-border);
+}
+
+.case-pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 18px 22px;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.case-pager-link:hover,
+.case-pager-link:focus-visible {
+    border-color: rgba(var(--primary-rgb), 0.28);
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px);
+}
+
+.case-pager-next {
+    text-align: right;
+}
+
+.case-pager-label {
+    color: var(--color-text-muted);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.case-pager-title {
+    color: var(--color-heading);
+    font-weight: 700;
+    overflow-wrap: break-word;
+}
+
+.case-back {
+    margin-top: 32px;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   Not found
+   ========================================================================== */
+
+.case-not-found {
+    max-width: 640px;
+    margin: 40px 0;
+    padding: 40px 32px;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+}
+
+.case-not-found h1 {
+    margin-bottom: 16px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+}
+
+.case-not-found p {
+    margin-bottom: 14px;
+}
+
+.case-not-found .button {
+    margin-top: 12px;
+}
+
+.case-noscript {
+    margin-top: 24px;
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+}
+
+/* ==========================================================================
+   Page entry
+   ========================================================================== */
+
+.case-study[hidden],
+.case-not-found[hidden] {
+    display: none;
+}
+
+.case-study:not([hidden]),
+.case-not-found:not([hidden]) {
+    animation: case-enter 0.4s ease both;
+}
+
+@keyframes case-enter {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 12px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 720px) {
+    .case-page main {
+        padding: 24px 20px 72px;
+    }
+
+    .case-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .case-actions .button {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .case-body {
+        gap: 36px;
+    }
+
+    .case-pager-next {
+        text-align: left;
+    }
+}
+
+@media (max-width: 400px) {
+    .case-page main {
+        padding: 20px 16px 64px;
+    }
+
+    .case-citation {
+        padding: 20px 18px;
+    }
+
+    .case-not-found {
+        padding: 28px 20px;
+    }
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .case-study:not([hidden]),
+    .case-not-found:not([hidden]) {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+
+    .case-arrow,
+    a:hover .case-arrow,
+    a:focus-visible .case-arrow {
+        transform: none !important;
+    }
+
+    .case-pager-link:hover,
+    .case-pager-link:focus-visible {
+        transform: none;
+    }
+}

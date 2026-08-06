@@ -6,11 +6,11 @@
  *   2. Dynamic copyright year
  *   3. Mobile navigation
  *   4. Project filtering
- *   5. Research publications
- *   6. Scroll reveal
- *   7. Active navigation highlighting
- *   8. Card tilt (projects and publications)
- *   9. Molecular network canvas
+ *   6. Research publications
+ *   7. Scroll reveal
+ *   8. Active navigation highlighting
+ *   9. Card tilt (projects and publications)
+ *   10. Molecular network canvas
  *
  * Every DOM lookup is guarded so a missing optional element cannot break the
  * rest of the script.
@@ -156,7 +156,137 @@
     }
 
     /* ====================================================================
-       4. Project filtering
+       4. Project cards
+       ====================================================================
+       Cards are generated from window.PORTFOLIO_PROJECTS (project-data.js)
+       so the homepage and the case-study pages share one source of truth.
+       The array order is the display order, featured projects first.
+       ==================================================================== */
+
+    function renderProjectCards() {
+        var grid = document.querySelector(".project-grid");
+        var catalogue = window.PORTFOLIO_PROJECTS;
+
+        if (!grid || !Array.isArray(catalogue) || !catalogue.length) {
+            return;
+        }
+
+        var fragment = document.createDocumentFragment();
+
+        catalogue.forEach(function (project) {
+            var card = document.createElement("article");
+
+            card.className = "project-card";
+            card.dataset.category = project.filterCategory || "";
+
+            var meta = document.createElement("div");
+            meta.className = "project-card-meta";
+
+            var category = (project.category || [])[0];
+            if (category) {
+                var tag = document.createElement("span");
+                tag.className = "project-tag";
+                tag.textContent = category;
+                meta.appendChild(tag);
+            }
+
+            if (project.status) {
+                var status = document.createElement("span");
+                status.className = "project-status-badge";
+                status.textContent = project.status;
+                meta.appendChild(status);
+            }
+
+            card.appendChild(meta);
+
+            var heading = document.createElement("h3");
+            heading.textContent = project.shortTitle || project.title;
+            card.appendChild(heading);
+
+            var summary = document.createElement("p");
+            summary.textContent = project.summary || "";
+            card.appendChild(summary);
+
+            var technologies = (project.technologies || []).slice(0, 4);
+            if (technologies.length) {
+                var techList = document.createElement("ul");
+                techList.className = "project-tech";
+                techList.setAttribute("aria-label", "Key technologies");
+
+                technologies.forEach(function (name) {
+                    var item = document.createElement("li");
+                    item.textContent = name;
+                    techList.appendChild(item);
+                });
+
+                card.appendChild(techList);
+            }
+
+            var actions = document.createElement("div");
+            actions.className = "project-card-actions";
+
+            // The card itself is not a link, so there are no nested links and
+            // no ambiguous click target.
+            var caseLink = document.createElement("a");
+            caseLink.className = "project-case-link";
+            caseLink.href = "project.html?id=" + encodeURIComponent(project.id);
+            caseLink.appendChild(document.createTextNode("View case study"));
+
+            var context = document.createElement("span");
+            context.className = "visually-hidden";
+            context.textContent = " for " + (project.shortTitle || project.title);
+            caseLink.appendChild(context);
+
+            var caseArrow = document.createElement("span");
+            caseArrow.className = "project-arrow";
+            caseArrow.setAttribute("aria-hidden", "true");
+            caseArrow.textContent = "\u2192";
+            caseLink.appendChild(caseArrow);
+
+            actions.appendChild(caseLink);
+
+            // Only rendered when a URL actually exists.
+            var external = project.githubUrl
+                ? { href: project.githubUrl, label: "GitHub repository" }
+                : project.publicationUrl
+                    ? { href: project.publicationUrl, label: "Publication" }
+                    : null;
+
+            if (external) {
+                var outbound = document.createElement("a");
+                outbound.className = "project-external-link";
+                outbound.href = external.href;
+                outbound.target = "_blank";
+                outbound.rel = "noopener noreferrer";
+                outbound.appendChild(document.createTextNode(external.label));
+
+                var outboundContext = document.createElement("span");
+                outboundContext.className = "visually-hidden";
+                outboundContext.textContent =
+                    " for " + (project.shortTitle || project.title) +
+                    " (opens in a new tab)";
+                outbound.appendChild(outboundContext);
+
+                var outboundArrow = document.createElement("span");
+                outboundArrow.className = "project-arrow";
+                outboundArrow.setAttribute("aria-hidden", "true");
+                outboundArrow.textContent = "\u2197";
+                outbound.appendChild(outboundArrow);
+
+                actions.appendChild(outbound);
+            }
+
+            card.appendChild(actions);
+            fragment.appendChild(card);
+        });
+
+        grid.appendChild(fragment);
+    }
+
+    renderProjectCards();
+
+    /* ====================================================================
+       5. Project filtering
        ====================================================================
        Both the projects and the publications section use the .filter-button
        class for styling, so each query is scoped to its own section.
@@ -263,7 +393,7 @@
     }
 
     /* ====================================================================
-       5. Research publications
+       6. Research publications
        ====================================================================
        The record of publications lives in the array below. Cards are built
        from it at run time, so adding an entry is the only edit needed to
@@ -779,7 +909,7 @@
     renderPublications();
 
     /* ====================================================================
-       6. Scroll reveal
+       7. Scroll reveal
        ==================================================================== */
 
     function setUpScrollReveal() {
@@ -789,7 +919,9 @@
                     "#projects h2, .project-filters, .project-card, " +
                     "#publications h2, .publications-intro, " +
                     ".publication-stats, .publication-filters, " +
-                    ".publication-card, #contact"
+                    ".publication-card, #contact, " +
+                    // Case-study page sections; absent on the homepage.
+                    ".case-section, .case-pager"
             )
         );
 
@@ -830,7 +962,7 @@
     setUpScrollReveal();
 
     /* ====================================================================
-       7. Active navigation highlighting
+       8. Active navigation highlighting
        ==================================================================== */
 
     function setUpActiveNavigation() {
@@ -924,7 +1056,7 @@
     setUpActiveNavigation();
 
     /* ====================================================================
-       8. Card tilt (projects and publications)
+       9. Card tilt (projects and publications)
        ====================================================================
        One shared implementation, given the full set of cards, so there is a
        single set of handlers and a single motion-preference listener.
@@ -1043,7 +1175,7 @@
     setUpCardTilt(projectCards.concat(publicationCards));
 
     /* ====================================================================
-       9. Molecular network canvas
+       10. Molecular network canvas
        ====================================================================
        A rigid cloud of projected 3D nodes joined by bonds. Because the body
        is rigid, neighbour pairs are computed once at build time and only the

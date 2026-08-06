@@ -20,6 +20,7 @@ step, no package manager.
 - About, research expertise, selected projects, research publications, and
   contact sections
 - Project-category filtering with an accessible live status message
+- Detailed research case studies on a reusable, data-driven project page
 - Publication filtering by output type and by year
 - Automatically updated copyright year
 
@@ -41,6 +42,85 @@ step, no package manager.
 - **Ambient depth** — a soft background gradient, two blurred colour orbs, and a
   faint scientific grid, all rendered behind the content with
   `pointer-events: none`.
+
+## Project Case Studies
+
+Each project on the homepage links to a detailed case study covering the
+research problem, objectives, dataset, methodology, workflow, results,
+limitations, and future work.
+
+| Case study | URL |
+| --- | --- |
+| AI-Assisted NSCLC Drug Discovery | `project.html?id=nsclc-drug-discovery` |
+| Protein–Peptide Multitask Deep Learning | `project.html?id=protein-peptide-multitask` |
+| PPI-PLM Benchmark | `project.html?id=ppi-plm-benchmark` |
+| STAT3 nsSNP Analysis | `project.html?id=stat3-variant-analysis` |
+| Interpretable Breast Cancer ML | `project.html?id=breast-cancer-ml` |
+
+An unrecognised or missing `id` renders a "Project not found" state with a
+link back to the project list. It never renders a blank page.
+
+### File structure
+
+```text
+index.html         homepage
+project.html       reusable case-study page, driven by ?id=
+project-data.js    structured data for every project (no DOM code)
+project.js         case-study rendering, routing, and metadata
+project.css        case-study styling, built on the tokens in styles.css
+styles.css         design tokens and shared styling
+script.js          navigation, filtering, reveal, tilt, hero canvas
+```
+
+`project.html` loads `project-data.js`, then `project.js`, then `script.js`,
+in that order. The site script runs last so it finds the finished case-study
+sections; because every lookup in it is guarded, the homepage-only parts
+(hero canvas, publications, project filters) simply do not run there. No
+JavaScript is duplicated between the two pages.
+
+### Adding a case study
+
+1. Append an object to `window.PORTFOLIO_PROJECTS` in `project-data.js`.
+   Array order is display order, so put featured work first.
+2. Required: `id`, `title`, `shortTitle`, `status`, `filterCategory`,
+   `category`, `summary`, `role`. Everything else is optional.
+3. `filterCategory` must match a `data-filter` value on a homepage filter
+   button (`protein-ai`, `bioinformatics`, `machine-learning`). Add a new
+   button to `index.html` first if you need a new one.
+4. Omit optional fields entirely rather than setting them to `""`. The
+   renderer draws a button only when its URL exists, so an absent
+   `githubUrl` means no GitHub button — never an empty link.
+5. `results` accepts plain strings, or `{ heading, note, items }` groups.
+   `items` may hold strings or `{ label, value }` metric pairs. Use `note`
+   whenever a number needs a qualifier.
+
+Both the homepage card and the case-study page are generated from that one
+object. There is nothing to update in `index.html`.
+
+### Updating project data
+
+Edit `project-data.js` only. The homepage cards and the case-study pages read
+the same array, so a change appears in both places. Nothing in the markup
+needs to be kept in sync by hand.
+
+### Research integrity
+
+This is a public research portfolio, so a number on it is a claim.
+
+- Do not state a result that is not traceable to a published paper, a
+  repository, or a manuscript.
+- Label every metric with the dataset it came from. Never combine values from
+  different datasets into a single headline figure.
+- Where a repository's checked-in metrics come from a synthetic or smoke
+  benchmark, say so on the page, in the `note` field of the result group.
+  Two case studies currently do this.
+- Do not describe an unpublished project as a published scholarly article.
+  JSON-LD is emitted as `ScholarlyArticle` only when a publication URL
+  exists, and as `CreativeWork` otherwise.
+- Never publish credentials, tokens, private paths, unpublished datasets,
+  proprietary source, or client names. Nothing confidential belongs in
+  `project-data.js`, which is served to every visitor.
+
 
 ## Research Publications
 
@@ -116,7 +196,15 @@ the detail line is only rendered when at least one of them is present.
 - Visible focus rings that meet the WCAG 3:1 non-text contrast minimum; all body
   and heading text meets or exceeds 4.5:1
 - The decorative canvas is wrapped in `aria-hidden="true"` and is not focusable
-- Touch targets are at least 44 px, including every publication link
+- Touch targets are at least 44 px, including every publication and
+  case-study link
+- Case-study pages carry a breadcrumb with `aria-current="page"`, one `<h1>`,
+  and no skipped heading levels
+- Links that open in a new tab say so through visually hidden text, and
+  card links name the project they belong to rather than repeating
+  "View case study"
+- Project status is written as a word, never signalled by colour alone
+- The workflow is an ordered list with real text, not an image
 - No information is conveyed by colour or animation alone
 - Full support for `prefers-reduced-motion: reduce`
 
@@ -190,6 +278,7 @@ Then open <http://localhost:8000>.
 
 ## Planned Improvements
 
+- Case-study preview images and Open Graph images per project
 - Contact form
 - Dark-mode option
 - Open Graph preview image

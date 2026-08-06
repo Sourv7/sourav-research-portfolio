@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <!-- Title, description, canonical, and Open Graph values are replaced by
+         project.js once the requested project has been resolved. The values
+         here are the fallback for an unknown or missing id. -->
+    <title>Research Project | Sourav Chandra</title>
+
+    <meta
+        name="description"
+        content="Detailed research case studies by Sourav Chandra, covering computational drug discovery, protein-peptide deep learning, structural bioinformatics, and interpretable machine learning."
+    >
+
+    <meta name="author" content="Sourav Chandra">
+    <meta name="theme-color" content="#0f172a">
+
+    <link
+        rel="canonical"
+        href="https://sourav-research-portfolio.vercel.app/project.html"
+    >
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Sourav Chandra">
+    <meta property="og:title" content="Research Project | Sourav Chandra">
+    <meta
+        property="og:description"
+        content="Detailed research case studies by Sourav Chandra."
+    >
+    <meta
+        property="og:url"
+        content="https://sourav-research-portfolio.vercel.app/project.html"
+    >
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Research Project | Sourav Chandra">
+    <meta
+        name="twitter:description"
+        content="Detailed research case studies by Sourav Chandra."
+    >
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="project.css">
+
+    <!-- Order matters: the data loads first, project.js builds the case
+         study, and script.js then picks up the finished sections for scroll
+         reveal and card tilt. All three are deferred, so they run in order. -->
+    <script src="project-data.js" defer></script>
+    <script src="project.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body class="case-page">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Ambient background, decorative only. The same visual language as the
+         homepage, without a second animation loop. -->
+    <div class="ambient-layer" aria-hidden="true">
+        <span class="ambient-grid"></span>
+        <span class="ambient-orb ambient-orb-one"></span>
+        <span class="ambient-orb ambient-orb-two"></span>
+    </div>
+
+    <header>
+        <nav aria-label="Primary navigation">
+            <a class="nav-brand" href="index.html">Sourav Chandra</a>
+
+            <button
+                class="nav-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="primary-menu"
+                aria-label="Open navigation menu"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <ul id="primary-menu">
+                <li><a class="nav-link" href="index.html#about">About</a></li>
+                <li><a class="nav-link" href="index.html#expertise">Expertise</a></li>
+                <li>
+                    <a class="nav-link is-active" href="index.html#projects">
+                        Projects
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link" href="index.html#publications">
+                        Publications
+                    </a>
+                </li>
+                <li><a class="nav-link" href="index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#projects">Projects</a></li>
+                <li>
+                    <span id="breadcrumb-current" aria-current="page">
+                        Project
+                    </span>
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Populated by project.js. Hidden until a project resolves, so a
+             failed lookup never flashes an empty case study. -->
+        <article id="case-study" class="case-study" hidden></article>
+
+        <section id="project-not-found" class="case-not-found" hidden>
+            <h1>Project not found</h1>
+
+            <p id="not-found-detail">
+                The project you are looking for does not exist.
+            </p>
+
+            <p>
+                It may have been renamed, or the link may be incomplete.
+                All available case studies are listed on the homepage.
+            </p>
+
+            <a class="button button-primary" href="index.html#projects">
+                Back to all projects
+            </a>
+        </section>
+
+        <p class="case-back">
+            <a href="index.html#projects">Back to all projects</a>
+        </p>
+
+        <noscript>
+            <p class="case-noscript">
+                Case studies are generated from structured project data with
+                JavaScript. With JavaScript turned off, the project list and
+                repository links remain available on the
+                <a href="index.html#projects">homepage</a>.
+            </p>
+        </noscript>
+    </main>
+
+    <footer>
+        <p>
+            &copy;
+            <span id="current-year"></span>
+            Sourav Chandra. All rights reserved.
+        </p>
+    </footer>
+</body>
+</html>
