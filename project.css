@@ -373,6 +373,131 @@ a:focus-visible .case-arrow {
     }
 }
 
+
+/* ==========================================================================
+   Molecular band
+   --------------------------------------------------------------------------
+   A short, wide reprise of the homepage hero visual. The canvas is decorative
+   and inert: aria-hidden, pointer-events none, and masked at both edges so it
+   reads as a texture behind the page rather than a picture on it.
+   ========================================================================== */
+
+.case-visual {
+    position: relative;
+
+    width: 100%;
+    height: 190px;
+    margin-bottom: 12px;
+
+    overflow: hidden;
+    pointer-events: none;
+
+    -webkit-mask-image: linear-gradient(
+        90deg, transparent, #000 22%, #000 78%, transparent
+    );
+    mask-image: linear-gradient(
+        90deg, transparent, #000 22%, #000 78%, transparent
+    );
+}
+
+/* Static fallback, visible when JavaScript is unavailable. */
+.case-visual::before {
+    position: absolute;
+    inset: 0;
+
+    background: radial-gradient(
+        ellipse at 50% 50%,
+        rgba(var(--primary-rgb), 0.13),
+        rgba(var(--accent-cyan-rgb), 0.08) 45%,
+        rgba(255, 255, 255, 0) 72%
+    );
+    content: "";
+}
+
+.case-visual .molecular-canvas {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+/* ==========================================================================
+   Tilt on case-study cards
+   --------------------------------------------------------------------------
+   Driven by the same --tilt-x / --tilt-y custom properties and .is-tilting
+   class that script.js already writes for the project and publication cards.
+   ========================================================================== */
+
+.case-metric,
+.case-pager-link {
+    transform:
+        perspective(var(--tilt-perspective))
+        translate3d(0, var(--hover-lift, 0px), 0)
+        rotateX(var(--tilt-x, 0deg))
+        rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
+}
+
+.case-metric {
+    position: relative;
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.case-metric:hover {
+    --hover-lift: -3px;
+
+    border-color: rgba(var(--primary-rgb), 0.26);
+    box-shadow: var(--shadow-medium);
+}
+
+.case-metric::after,
+.case-pager-link::after {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background: radial-gradient(
+        220px circle at var(--glare-x, 50%) var(--glare-y, 50%),
+        rgba(var(--primary-rgb), 0.10),
+        rgba(255, 255, 255, 0) 62%
+    );
+    border-radius: inherit;
+    content: "";
+    opacity: 0;
+    pointer-events: none;
+
+    transition: opacity var(--transition-fast);
+}
+
+.case-pager-link {
+    position: relative;
+}
+
+.case-metric.is-tilting,
+.case-pager-link.is-tilting {
+    transition:
+        border-color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform 0.12s ease-out;
+}
+
+.case-metric.is-tilting::after,
+.case-pager-link.is-tilting::after {
+    opacity: 1;
+}
+
+.case-metric > *,
+.case-pager-link > * {
+    position: relative;
+    z-index: 2;
+}
+
 /* ==========================================================================
    Citation and repository
    ========================================================================== */
@@ -565,6 +690,10 @@ a:focus-visible .case-arrow {
         gap: 36px;
     }
 
+    .case-visual {
+        height: 140px;
+    }
+
     .case-pager-next {
         text-align: left;
     }
@@ -605,5 +734,15 @@ a:focus-visible .case-arrow {
     .case-pager-link:hover,
     .case-pager-link:focus-visible {
         transform: none;
+    }
+
+    .case-metric,
+    .case-pager-link {
+        transform: none;
+    }
+
+    .case-metric::after,
+    .case-pager-link::after {
+        display: none;
     }
 }

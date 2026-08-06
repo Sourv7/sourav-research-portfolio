@@ -1172,7 +1172,14 @@
         });
     }
 
-    setUpCardTilt(projectCards.concat(publicationCards));
+    // Case-study metric tiles and pager cards are absent on the homepage;
+    // including them here keeps a single tilt implementation and a single
+    // motion-preference listener across both pages.
+    var caseCards = toArray(
+        document.querySelectorAll(".case-metric, .case-pager-link")
+    );
+
+    setUpCardTilt(projectCards.concat(publicationCards, caseCards));
 
     /* ====================================================================
        10. Molecular network canvas
