@@ -17,8 +17,10 @@ step, no package manager.
 - Responsive sticky navigation with a scroll-synced active-section indicator
 - Accessible mobile navigation menu (hamburger toggle, Escape to close)
 - Two-column hero on desktop, single column on smaller screens
-- About, research expertise, selected projects, and contact sections
+- About, research expertise, selected projects, research publications, and
+  contact sections
 - Project-category filtering with an accessible live status message
+- Publication filtering by output type and by year
 - Automatically updated copyright year
 
 ### Interaction and motion
@@ -31,11 +33,74 @@ step, no package manager.
   its idle rotation when the pointer stops or leaves the window.
 - **Scroll-reveal animation** — sections, headings, and cards fade and rise into
   place once, driven by `IntersectionObserver`.
-- **3D project-card tilt** — a restrained perspective tilt (maximum 5°) with a
-  soft directional glare, following the pointer across each card.
+- **3D card tilt** — a restrained perspective tilt (maximum 5°) with a soft
+  directional glare, following the pointer across each project and publication
+  card. Pointer-capable desktop devices only.
+- **Counting statistics** — the publication totals count up once, the first time
+  the section scrolls into view.
 - **Ambient depth** — a soft background gradient, two blurred colour orbs, and a
   faint scientific grid, all rendered behind the content with
   `pointer-events: none`.
+
+## Research Publications
+
+The Publications section lists every verified research output: **6 peer-reviewed
+journal articles** and **2 preprints**, for **8 research outputs** in total.
+
+Each card shows the publication type, the year, the full title, the complete
+author list, the journal or preprint server, the volume, pages, or article
+number where one exists, the DOI, and a link that opens the publisher's page in
+a new tab. My own name is emphasised wherever it appears in an author list, in
+either name order.
+
+### Preprints are labelled separately
+
+Journal articles and preprints never share a badge. Peer-reviewed articles are
+marked **Journal Article** in blue with a solid outline; preprints are marked
+**Preprint — Not Peer Reviewed** in violet with a dashed outline. The
+distinction is carried by the wording and the border style as well as the
+colour, so it survives greyscale and colour-blind viewing. Nothing that has not
+been peer reviewed is ever presented as though it has been.
+
+### Where the records live
+
+Publication records are maintained in `script.js`, in the array named
+`publications` in section 5 of the file. There is no database, no CMS, and no
+build step: the cards in `index.html` are generated from that array at run time,
+so the array is the single source of truth for both the cards and the summary
+statistics above them.
+
+### Adding a new publication
+
+1. Open `script.js` and find the `publications` array.
+2. Copy an existing entry and add it in the correct position. The array is
+   ordered newest first, and the page renders it in array order.
+3. Fill in the fields:
+
+   | Field | Required | Notes |
+   | --- | --- | --- |
+   | `id` | yes | Unique, lowercase, hyphenated. Becomes the card's HTML `id`. |
+   | `title` | yes | Full title, no truncation. |
+   | `authors` | yes | Complete author list, comma separated, in publication order. |
+   | `source` | yes | Journal name, or the preprint server. |
+   | `date` | yes | Human-readable publication date. |
+   | `year` | yes | Number, not a string. Drives the year filters. |
+   | `type` | yes | Either `"journal"` or `"preprint"`. Drives the badge and the type filters. |
+   | `label` | yes | `"Journal Article"` or `"Preprint — Not Peer Reviewed"`. |
+   | `volume` | no | Omit when there is none. |
+   | `pages` | no | Omit when there is none. |
+   | `articleNumber` | no | Omit when there is none. |
+   | `doi` | yes | Bare DOI, with no `https://doi.org/` prefix. |
+   | `url` | yes | Full https link to the publisher's page. |
+
+4. If the new entry introduces a year that has no filter button yet, add one to
+   the publication filter group in `index.html`, using
+   `data-publication-filter="YYYY"`.
+5. The three statistics recount themselves from the array. The figures in
+   `index.html` are a no-JavaScript fallback, so update them to match.
+
+Optional fields must be left out entirely rather than set to an empty string;
+the detail line is only rendered when at least one of them is present.
 
 ## Accessibility
 
@@ -44,13 +109,14 @@ step, no package manager.
 - A "Skip to main content" link that becomes visible on keyboard focus
 - `aria-expanded` on the menu toggle, `aria-pressed` on every filter button,
   and `aria-current="location"` on the active navigation link
-- Filter results announced through a polite `role="status"` region
-- Hidden project cards use the `hidden` attribute, so they leave both the tab
-  order and the accessibility tree
+- Filter results, for both projects and publications, announced through a polite
+  `role="status"` region
+- Hidden cards use the `hidden` attribute, so they leave both the tab order and
+  the accessibility tree
 - Visible focus rings that meet the WCAG 3:1 non-text contrast minimum; all body
   and heading text meets or exceeds 4.5:1
 - The decorative canvas is wrapped in `aria-hidden="true"` and is not focusable
-- Touch targets are at least 44 px
+- Touch targets are at least 44 px, including every publication link
 - No information is conveyed by colour or animation alone
 - Full support for `prefers-reduced-motion: reduce`
 
@@ -61,6 +127,7 @@ When `prefers-reduced-motion: reduce` is set:
 - the canvas draws a single static frame and never starts an animation loop
 - pointer parallax and card tilt are switched off
 - scroll-reveal classes are never applied, so content renders at full opacity
+- the publication statistics are written directly rather than counted up
 - CSS transitions and keyframes are reduced to a negligible duration
 
 ## Performance
@@ -77,6 +144,11 @@ When `prefers-reduced-motion: reduce` is set:
   quadrupling the fill cost
 - The loop is stopped when the tab is hidden and when the hero scrolls out of
   view, and restarted on return
+- The canvas owns the only continuous animation loop on the page. Card tilt,
+  filter transitions, and the counting statistics use short
+  `requestAnimationFrame` callbacks that settle and stop
+- Publication cards are built into a single `DocumentFragment` and appended in
+  one operation, so the list costs one layout rather than eight
 - Card tilt reads each card's bounding rectangle once per hover, not per frame,
   and writes are batched into a single `requestAnimationFrame`
 - Animation uses only `transform` and `opacity`; sizes are fixed up front to
@@ -84,9 +156,14 @@ When `prefers-reduced-motion: reduce` is set:
 
 ## Progressive enhancement
 
-The site is fully readable with JavaScript disabled. Reveal animations are
-applied by adding classes from JavaScript, so nothing is hidden by default, and
-the hero visualization degrades to a soft CSS gradient behind the empty canvas.
+The site is readable with JavaScript disabled: reveal animations are applied by
+adding classes from JavaScript, so nothing is hidden by default, and the hero
+visualization degrades to a soft CSS gradient behind the empty canvas.
+
+The publication cards are the one exception. They are generated from the
+`publications` array, so with JavaScript off the section renders its heading,
+introduction, and statistics, and a `<noscript>` message points to the full
+record elsewhere.
 
 ## Technologies
 
@@ -113,7 +190,7 @@ Then open <http://localhost:8000>.
 
 ## Planned Improvements
 
-- Research publications section
 - Contact form
 - Dark-mode option
 - Open Graph preview image
+- ORCID link for the publication record

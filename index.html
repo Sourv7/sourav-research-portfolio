@@ -105,6 +105,11 @@
                 <li><a class="nav-link" href="#about">About</a></li>
                 <li><a class="nav-link" href="#expertise">Expertise</a></li>
                 <li><a class="nav-link" href="#projects">Projects</a></li>
+                <li>
+                    <a class="nav-link" href="#publications">
+                        Publications
+                    </a>
+                </li>
                 <li><a class="nav-link" href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -312,6 +317,124 @@
                     </a>
                 </article>
             </div>
+        </section>
+
+        <section id="publications">
+            <h2>Research Publications</h2>
+
+            <p class="publications-intro">
+                Peer-reviewed research and preprints spanning artificial
+                intelligence, computational drug discovery, molecular
+                dynamics, bioinformatics, antimicrobial discovery, and
+                immunoinformatics.
+            </p>
+
+            <!-- Values are recalculated from the publications array in
+                 script.js; the markup carries the same figures so the
+                 statistics remain correct without JavaScript. -->
+            <ul class="publication-stats">
+                <li class="publication-stat">
+                    <span
+                        class="publication-stat-value"
+                        data-publication-stat="journal"
+                    >6</span>
+                    <span class="publication-stat-label">
+                        Journal Articles
+                    </span>
+                </li>
+
+                <li class="publication-stat">
+                    <span
+                        class="publication-stat-value"
+                        data-publication-stat="preprint"
+                    >2</span>
+                    <span class="publication-stat-label">
+                        Preprints
+                    </span>
+                </li>
+
+                <li class="publication-stat">
+                    <span
+                        class="publication-stat-value"
+                        data-publication-stat="total"
+                    >8</span>
+                    <span class="publication-stat-label">
+                        Research Outputs
+                    </span>
+                </li>
+            </ul>
+
+            <div
+                class="publication-filters"
+                role="group"
+                aria-label="Filter publications by type or year"
+            >
+                <button
+                    class="filter-button is-active"
+                    type="button"
+                    data-publication-filter="all"
+                    aria-pressed="true"
+                >
+                    All
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-publication-filter="journal"
+                    aria-pressed="false"
+                >
+                    Journal Articles
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-publication-filter="preprint"
+                    aria-pressed="false"
+                >
+                    Preprints
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-publication-filter="2026"
+                    aria-pressed="false"
+                >
+                    2026
+                </button>
+
+                <button
+                    class="filter-button"
+                    type="button"
+                    data-publication-filter="2025"
+                    aria-pressed="false"
+                >
+                    2025
+                </button>
+            </div>
+
+            <p
+                class="publication-status"
+                id="publication-status"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <div class="publication-grid" id="publication-grid"></div>
+
+            <noscript>
+                <p class="publication-noscript">
+                    The publication list is rendered with JavaScript. With
+                    JavaScript turned off, the full record is available on
+                    <a
+                        href="https://orcid.org/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >ORCID</a>.
+                </p>
+            </noscript>
         </section>
 
         <section id="contact">

@@ -6,10 +6,11 @@
  *   2. Dynamic copyright year
  *   3. Mobile navigation
  *   4. Project filtering
- *   5. Scroll reveal
- *   6. Active navigation highlighting
- *   7. Project-card tilt
- *   8. Molecular network canvas
+ *   5. Research publications
+ *   6. Scroll reveal
+ *   7. Active navigation highlighting
+ *   8. Card tilt (projects and publications)
+ *   9. Molecular network canvas
  *
  * Every DOM lookup is guarded so a missing optional element cannot break the
  * rest of the script.
@@ -56,6 +57,10 @@
 
     function clamp(value, minimum, maximum) {
         return Math.min(maximum, Math.max(minimum, value));
+    }
+
+    function toArray(nodeList) {
+        return Array.prototype.slice.call(nodeList);
     }
 
     /**
@@ -152,14 +157,17 @@
 
     /* ====================================================================
        4. Project filtering
+       ====================================================================
+       Both the projects and the publications section use the .filter-button
+       class for styling, so each query is scoped to its own section.
        ==================================================================== */
 
-    var filterButtons = Array.prototype.slice.call(
-        document.querySelectorAll(".filter-button")
+    var filterButtons = toArray(
+        document.querySelectorAll("#projects .filter-button")
     );
 
-    var projectCards = Array.prototype.slice.call(
-        document.querySelectorAll(".project-card[data-category]")
+    var projectCards = toArray(
+        document.querySelectorAll("#projects .project-card[data-category]")
     );
 
     var projectStatus = document.querySelector("#project-status");
@@ -255,14 +263,533 @@
     }
 
     /* ====================================================================
-       5. Scroll reveal
+       5. Research publications
+       ====================================================================
+       The record of publications lives in the array below. Cards are built
+       from it at run time, so adding an entry is the only edit needed to
+       add a publication to the page.
+       ==================================================================== */
+
+    var publications = [
+        {
+            id: "l-asparaginase-mutagenesis-2026",
+            title:
+                "Directed Mutagenesis of Catalytic Residues in " +
+                "L-Asparaginase II from Salmonella paratyphi: Structural, " +
+                "Functional and Stability Analysis Using In-Vitro, Docking " +
+                "and Simulation Studies",
+            authors:
+                "Ejlal Mohamed Abdullah, Mohd Shahnawaz Khan, " +
+                "Farid Shokry Ataya, Majed S. Alokail, Chandra Sourav, " +
+                "Pokhrel Ankit, Alaa Alnoor Alameen, Jeevan Kandel, " +
+                "Bigyan Ranjan Jali",
+            source: "Applied Biochemistry and Biotechnology",
+            date: "21 July 2026",
+            year: 2026,
+            type: "journal",
+            label: "Journal Article",
+            doi: "10.1007/s12010-026-05838-z",
+            url: "https://link.springer.com/article/10.1007/s12010-026-05838-z"
+        },
+        {
+            id: "fadv11-vaccine-2026",
+            title:
+                "Multi-Epitope Vaccine Design Against Fowl Adenovirus " +
+                "Serotype 11 Based on Conserved Penton and Fiber Proteins " +
+                "for the Prevention of Inclusion Body Hepatitis in Poultry",
+            authors:
+                "Muhammad Daniyal Hameed, Abdul Raffay Qureshi, " +
+                "Rumesa Ghazanfar, Muhammad Atiq Ur Rehman, Chandra Sourav, " +
+                "Zainab Nagari, Muhammad Zeeshan Shabbir",
+            source: "Preprints.org",
+            date: "17 July 2026",
+            year: 2026,
+            type: "preprint",
+            label: "Preprint — Not Peer Reviewed",
+            doi: "10.20944/preprints202607.1274.v1",
+            url: "https://www.preprints.org/manuscript/202607.1274"
+        },
+        {
+            id: "influenza-vaccine-2026",
+            title:
+                "Immunoinformatics-Guided Design and In Silico Evaluation " +
+                "of a Multi-Epitope Vaccine Against Influenza A H10N5 and " +
+                "H3N2 Strains Based on Hemagglutinin and Neuraminidase " +
+                "Proteins",
+            authors:
+                "Muhammad Zeeshan Shabbir, Prem Kumar, " +
+                "Muhammad Atiq Ur Rehman, Jeevan Kumar, Umama Urooj, " +
+                "Syeda Izza Batool, Chandra Sourav, Rumesa Ghazanfar, " +
+                "Zainab Nagari, Daniyal Hameed, Abdul Wahid, Ayesha, " +
+                "Muhammad Daniyal Siddique",
+            source: "bioRxiv",
+            date: "8 July 2026",
+            year: 2026,
+            type: "preprint",
+            label: "Preprint — Not Peer Reviewed",
+            doi: "10.64898/2026.07.03.736294",
+            url:
+                "https://www.biorxiv.org/content/" +
+                "10.64898/2026.07.03.736294v1"
+        },
+        {
+            id: "synechococcus-antimicrobial-2026",
+            title:
+                "Antimicrobial efficacy of cyanobacterium Synechococcus " +
+                "pevalekii extracts against MDR bacteria and fungi; an " +
+                "integrated GC–MS, molecular docking and MD simulation study",
+            authors:
+                "Sagar Patra, Sanjana Sabat, Ajit Kumar Bishoyi, " +
+                "Chandra Sourav, Pokhrel Ankit, Mohd Shahnawaz Khan, " +
+                "Bigyan Ranjan Jali, Rabindra Nath Padhy",
+            source: "Antonie van Leeuwenhoek",
+            date: "25 June 2026",
+            year: 2026,
+            type: "journal",
+            label: "Journal Article",
+            volume: "119",
+            articleNumber: "149",
+            doi: "10.1007/s10482-026-02362-2",
+            url: "https://link.springer.com/article/10.1007/s10482-026-02362-2"
+        },
+        {
+            id: "small-ruminant-vaccine-2026",
+            title:
+                "An in silico approach to design a multi-epitope vaccine " +
+                "against small ruminant lentiviruses causing Maedi-Visna " +
+                "and caprine arthritis encephalitis in sheep and goats",
+            authors:
+                "Rumesa Ghazanfar, Zainab Nagari, " +
+                "Muhammad Atiq Ur Rehman, Chandra Sourav, " +
+                "Muhammad Zeeshan Shabbir",
+            source: "Microbes & Immunity",
+            date: "9 June 2026",
+            year: 2026,
+            type: "journal",
+            label: "Journal Article",
+            articleNumber: "025450121",
+            doi: "10.36922/MI025450121",
+            url:
+                "https://www.accscience.com/journal/MI/articles/" +
+                "online_first/7970"
+        },
+        {
+            id: "plectonema-bioactivity-2026",
+            title:
+                "Integrated bioactivity assessment of the cyanobacterium " +
+                "plectonema terebrans extract: an in vitro and in silico " +
+                "study",
+            authors:
+                "Sanjana Sabat, Sagar Patra, Chandra Sourav, " +
+                "Pokhrel Ankit, Mohd Shahnawaz Khan, Bigyan Ranjan Jali, " +
+                "Ajit Kumar Bishoyi, Rabindra Nath Padhy",
+            source: "Antonie van Leeuwenhoek",
+            date: "27 May 2026",
+            year: 2026,
+            type: "journal",
+            label: "Journal Article",
+            volume: "119",
+            articleNumber: "135",
+            doi: "10.1007/s10482-026-02350-6",
+            url: "https://link.springer.com/article/10.1007/s10482-026-02350-6"
+        },
+        {
+            id: "jak2-ai-discovery-2026",
+            title:
+                "AI and experimental convergence: a synergistic pathway to " +
+                "JAK2 inhibitor discovery",
+            authors:
+                "Maryam Rasool, Hwangeui Cho, Ankit Pokhrel, " +
+                "Sourav Chandra, Han-Jung Chae, Kil To Chong, Hilal Tayara",
+            source: "Acta Pharmacologica Sinica",
+            date: "27 January 2026",
+            year: 2026,
+            type: "journal",
+            label: "Journal Article",
+            volume: "47",
+            pages: "1361–1373",
+            doi: "10.1038/s41401-025-01701-9",
+            url: "https://www.nature.com/articles/s41401-025-01701-9"
+        },
+        {
+            id: "nigella-nsclc-2025",
+            title:
+                "Exploring Nigella sativa anticancerous properties using " +
+                "network pharmacology, molecular docking and molecular " +
+                "dynamics simulation approach for non-small cell lung cancer",
+            authors: "Chandra Sourav, Kil To Chong, Hilal Tayara",
+            source: "Food Bioscience",
+            date: "January 2025",
+            year: 2025,
+            type: "journal",
+            label: "Journal Article",
+            volume: "63",
+            articleNumber: "105525",
+            doi: "10.1016/j.fbio.2024.105525",
+            url:
+                "https://www.sciencedirect.com/science/article/pii/" +
+                "S2212429224019564"
+        }
+    ];
+
+    var publicationGrid = document.querySelector("#publication-grid");
+    var publicationStatus = document.querySelector("#publication-status");
+    var publicationStatsList = document.querySelector(".publication-stats");
+
+    var publicationFilterButtons = toArray(
+        document.querySelectorAll("#publications .filter-button")
+    );
+
+    var publicationCards = [];
+    var pendingPublicationFrame = null;
+
+    // Both name orders used across the author lists.
+    var SELF_NAME_PATTERN = /(Chandra Sourav|Sourav Chandra)/g;
+
+    function appendAuthorList(target, authorsText) {
+        // split() with a capturing group keeps the matched names, so the
+        // author string is rebuilt as text nodes with no markup injected.
+        authorsText.split(SELF_NAME_PATTERN).forEach(function (part) {
+            if (!part) {
+                return;
+            }
+
+            if (part === "Chandra Sourav" || part === "Sourav Chandra") {
+                var self = document.createElement("strong");
+
+                self.className = "publication-author-self";
+                self.textContent = part;
+                target.appendChild(self);
+
+                return;
+            }
+
+            target.appendChild(document.createTextNode(part));
+        });
+    }
+
+    function describePublicationDetail(entry) {
+        var parts = [];
+
+        if (entry.volume) {
+            parts.push("Volume " + entry.volume);
+        }
+
+        if (entry.articleNumber) {
+            parts.push("Article " + entry.articleNumber);
+        }
+
+        if (entry.pages) {
+            parts.push("Pages " + entry.pages);
+        }
+
+        return parts.join(" · ");
+    }
+
+    function createPublicationCard(entry) {
+        var card = document.createElement("article");
+
+        card.className = "publication-card";
+        card.id = "publication-" + entry.id;
+        card.dataset.type = entry.type;
+        card.dataset.year = String(entry.year);
+
+        var header = document.createElement("div");
+        header.className = "publication-header";
+
+        var badge = document.createElement("span");
+        badge.className =
+            "publication-badge publication-badge-" + entry.type;
+        badge.textContent = entry.label;
+        header.appendChild(badge);
+
+        var year = document.createElement("span");
+        year.className = "publication-year";
+        year.textContent = String(entry.year);
+        header.appendChild(year);
+
+        card.appendChild(header);
+
+        var title = document.createElement("h3");
+        title.className = "publication-title";
+        title.textContent = entry.title;
+        card.appendChild(title);
+
+        var authors = document.createElement("p");
+        authors.className = "publication-authors";
+        appendAuthorList(authors, entry.authors);
+        card.appendChild(authors);
+
+        var source = document.createElement("p");
+        source.className = "publication-source";
+
+        var sourceName = document.createElement("cite");
+        sourceName.textContent = entry.source;
+        source.appendChild(sourceName);
+        source.appendChild(document.createTextNode(" · " + entry.date));
+        card.appendChild(source);
+
+        var detailText = describePublicationDetail(entry);
+
+        if (detailText) {
+            var detail = document.createElement("p");
+
+            detail.className = "publication-detail";
+            detail.textContent = detailText;
+            card.appendChild(detail);
+        }
+
+        var doi = document.createElement("p");
+        doi.className = "publication-doi";
+        doi.textContent = "DOI: " + entry.doi;
+        card.appendChild(doi);
+
+        var link = document.createElement("a");
+        link.className = "publication-link";
+        link.href = entry.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.appendChild(document.createTextNode("View publication"));
+
+        var arrow = document.createElement("span");
+        arrow.className = "publication-arrow";
+        arrow.setAttribute("aria-hidden", "true");
+        arrow.textContent = "\u2192";
+        link.appendChild(arrow);
+
+        card.appendChild(link);
+
+        return card;
+    }
+
+    function countPublications(predicate) {
+        return publications.filter(predicate).length;
+    }
+
+    function animateStatValue(element, targetValue) {
+        if (prefersReducedMotion()) {
+            element.textContent = String(targetValue);
+            return;
+        }
+
+        var DURATION = 750;
+        var startTime = 0;
+
+        element.textContent = "0";
+
+        // A short, self-terminating count-up. It is not a persistent loop:
+        // the last frame settles on the final value and stops.
+        function tick(timestamp) {
+            if (!startTime) {
+                startTime = timestamp;
+            }
+
+            var progress = clamp((timestamp - startTime) / DURATION, 0, 1);
+            var eased = 1 - Math.pow(1 - progress, 3);
+
+            element.textContent = String(Math.round(targetValue * eased));
+
+            if (progress < 1) {
+                window.requestAnimationFrame(tick);
+            }
+        }
+
+        window.requestAnimationFrame(tick);
+    }
+
+    function setUpPublicationStats() {
+        var statTargets = [
+            {
+                element: document.querySelector(
+                    "[data-publication-stat='journal']"
+                ),
+                value: countPublications(function (entry) {
+                    return entry.type === "journal";
+                })
+            },
+            {
+                element: document.querySelector(
+                    "[data-publication-stat='preprint']"
+                ),
+                value: countPublications(function (entry) {
+                    return entry.type === "preprint";
+                })
+            },
+            {
+                element: document.querySelector(
+                    "[data-publication-stat='total']"
+                ),
+                value: publications.length
+            }
+        ].filter(function (target) {
+            return Boolean(target.element);
+        });
+
+        if (!statTargets.length) {
+            return;
+        }
+
+        function settle() {
+            statTargets.forEach(function (target) {
+                target.element.textContent = String(target.value);
+            });
+        }
+
+        if (
+            prefersReducedMotion() ||
+            !supportsIntersectionObserver() ||
+            !publicationStatsList
+        ) {
+            settle();
+            return;
+        }
+
+        var statsObserver = new IntersectionObserver(
+            function (entries) {
+                if (!entries[0].isIntersecting) {
+                    return;
+                }
+
+                statsObserver.disconnect();
+
+                statTargets.forEach(function (target) {
+                    animateStatValue(target.element, target.value);
+                });
+            },
+            { threshold: 0.4 }
+        );
+
+        statsObserver.observe(publicationStatsList);
+    }
+
+    function publicationMatchesFilter(card, selectedFilter) {
+        if (selectedFilter === "all") {
+            return true;
+        }
+
+        if (selectedFilter === "journal" || selectedFilter === "preprint") {
+            return card.dataset.type === selectedFilter;
+        }
+
+        return card.dataset.year === selectedFilter;
+    }
+
+    function describePublicationResult(visibleCount, filterLabel, isAll) {
+        if (visibleCount === 0) {
+            return "No publications match this filter.";
+        }
+
+        if (isAll) {
+            return "Showing all " + visibleCount + " research outputs.";
+        }
+
+        return (
+            "Showing " +
+            visibleCount +
+            " of " +
+            publicationCards.length +
+            " research outputs in " +
+            filterLabel +
+            "."
+        );
+    }
+
+    function applyPublicationFilter(activeButton) {
+        var selectedFilter = activeButton.dataset.publicationFilter;
+        var isAll = selectedFilter === "all";
+        var visibleCards = [];
+
+        publicationFilterButtons.forEach(function (button) {
+            var buttonIsActive = button === activeButton;
+
+            button.classList.toggle("is-active", buttonIsActive);
+            button.setAttribute("aria-pressed", String(buttonIsActive));
+        });
+
+        publicationCards.forEach(function (card) {
+            var shouldBeVisible = publicationMatchesFilter(
+                card,
+                selectedFilter
+            );
+
+            card.hidden = !shouldBeVisible;
+            card.classList.remove("is-entering");
+
+            if (shouldBeVisible) {
+                card.classList.add("is-visible");
+                visibleCards.push(card);
+            }
+        });
+
+        if (publicationStatus) {
+            publicationStatus.textContent = describePublicationResult(
+                visibleCards.length,
+                activeButton.textContent.trim(),
+                isAll
+            );
+        }
+
+        if (pendingPublicationFrame !== null) {
+            window.cancelAnimationFrame(pendingPublicationFrame);
+            pendingPublicationFrame = null;
+        }
+
+        if (prefersReducedMotion()) {
+            return;
+        }
+
+        pendingPublicationFrame = window.requestAnimationFrame(function () {
+            pendingPublicationFrame = null;
+
+            visibleCards.forEach(function (card) {
+                card.classList.add("is-entering");
+            });
+        });
+    }
+
+    function renderPublications() {
+        if (!publicationGrid) {
+            return;
+        }
+
+        var fragment = document.createDocumentFragment();
+
+        publications.forEach(function (entry) {
+            var card = createPublicationCard(entry);
+
+            card.addEventListener("animationend", function () {
+                card.classList.remove("is-entering");
+            });
+
+            publicationCards.push(card);
+            fragment.appendChild(card);
+        });
+
+        publicationGrid.appendChild(fragment);
+
+        publicationFilterButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                applyPublicationFilter(button);
+            });
+        });
+
+        setUpPublicationStats();
+    }
+
+    renderPublications();
+
+    /* ====================================================================
+       6. Scroll reveal
        ==================================================================== */
 
     function setUpScrollReveal() {
-        var revealTargets = Array.prototype.slice.call(
+        var revealTargets = toArray(
             document.querySelectorAll(
                 "#about, #expertise h2, .expertise-list li, " +
-                    "#projects h2, .project-filters, .project-card, #contact"
+                    "#projects h2, .project-filters, .project-card, " +
+                    "#publications h2, .publications-intro, " +
+                    ".publication-stats, .publication-filters, " +
+                    ".publication-card, #contact"
             )
         );
 
@@ -303,11 +830,11 @@
     setUpScrollReveal();
 
     /* ====================================================================
-       6. Active navigation highlighting
+       7. Active navigation highlighting
        ==================================================================== */
 
     function setUpActiveNavigation() {
-        var navLinks = Array.prototype.slice.call(
+        var navLinks = toArray(
             document.querySelectorAll(".nav-link[href^='#']")
         );
 
@@ -397,11 +924,14 @@
     setUpActiveNavigation();
 
     /* ====================================================================
-       7. Project-card tilt
+       8. Card tilt (projects and publications)
+       ====================================================================
+       One shared implementation, given the full set of cards, so there is a
+       single set of handlers and a single motion-preference listener.
        ==================================================================== */
 
-    function setUpCardTilt() {
-        if (!projectCards.length) {
+    function setUpCardTilt(cards) {
+        if (!cards.length) {
             return;
         }
 
@@ -492,7 +1022,7 @@
             resetCard(card);
         }
 
-        projectCards.forEach(function (card) {
+        cards.forEach(function (card) {
             card.addEventListener("pointerenter", handlePointerEnter);
             card.addEventListener("pointermove", handlePointerMove);
             card.addEventListener("pointerleave", handlePointerLeave);
@@ -506,14 +1036,14 @@
 
             activeCard = null;
             activeRect = null;
-            projectCards.forEach(resetCard);
+            cards.forEach(resetCard);
         });
     }
 
-    setUpCardTilt();
+    setUpCardTilt(projectCards.concat(publicationCards));
 
     /* ====================================================================
-       8. Molecular network canvas
+       9. Molecular network canvas
        ====================================================================
        A rigid cloud of projected 3D nodes joined by bonds. Because the body
        is rigid, neighbour pairs are computed once at build time and only the
