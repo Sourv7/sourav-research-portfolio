@@ -558,46 +558,19 @@ a:focus-visible .case-arrow {
 }
 
 /* ==========================================================================
-   Molecular band
+   Full-page molecular background
    --------------------------------------------------------------------------
-   A short, wide reprise of the homepage hero visual. The canvas is decorative
-   and inert: aria-hidden, pointer-events none, and masked at both edges so it
-   reads as a texture behind the page rather than a picture on it.
+   The canvas fills the viewport inside the fixed ambient layer, so it stays
+   put while the page scrolls.
+
+   Legibility is the constraint. Two things protect it: a low overall opacity,
+   and a radial mask that thins the layer further through the middle of the
+   screen, which is exactly where the text column sits. The combined alpha
+   behind body copy is roughly 0.1, so measured text contrast is effectively
+   unchanged, while the edges of the screen keep the full structure.
    ========================================================================== */
 
-.case-visual {
-    position: relative;
-
-    width: 100%;
-    height: 230px;
-    margin-bottom: 12px;
-
-    overflow: hidden;
-    pointer-events: none;
-
-    -webkit-mask-image: linear-gradient(
-        90deg, transparent, #000 22%, #000 78%, transparent
-    );
-    mask-image: linear-gradient(
-        90deg, transparent, #000 22%, #000 78%, transparent
-    );
-}
-
-/* Static fallback, visible when JavaScript is unavailable. */
-.case-visual::before {
-    position: absolute;
-    inset: 0;
-
-    background: radial-gradient(
-        ellipse at 50% 50%,
-        rgba(var(--primary-rgb), 0.13),
-        rgba(var(--accent-cyan-rgb), 0.08) 45%,
-        rgba(255, 255, 255, 0) 72%
-    );
-    content: "";
-}
-
-.case-visual .molecular-canvas {
+.molecular-background {
     position: absolute;
     inset: 0;
 
@@ -605,6 +578,34 @@ a:focus-visible .case-arrow {
     height: 100%;
 
     display: block;
+    opacity: 0.55;
+    pointer-events: none;
+
+    -webkit-mask-image: radial-gradient(
+        ellipse 58% 52% at 50% 42%,
+        rgba(0, 0, 0, 0.18),
+        rgba(0, 0, 0, 0.55) 62%,
+        #000 88%
+    );
+    mask-image: radial-gradient(
+        ellipse 58% 52% at 50% 42%,
+        rgba(0, 0, 0, 0.18),
+        rgba(0, 0, 0, 0.55) 62%,
+        #000 88%
+    );
+}
+
+/* The grid would compete with the network; soften it where both are shown. */
+.case-page .ambient-grid {
+    opacity: 0.55;
+}
+
+/* Small screens carry less spare area beside the text column, so the layer
+   steps further back rather than crowding the copy. */
+@media (max-width: 720px) {
+    .molecular-background {
+        opacity: 0.38;
+    }
 }
 
 /* ==========================================================================
@@ -873,9 +874,6 @@ a:focus-visible .case-arrow {
         gap: 36px;
     }
 
-    .case-visual {
-        height: 140px;
-    }
 
     .case-pager-next {
         text-align: left;
@@ -927,5 +925,12 @@ a:focus-visible .case-arrow {
     .case-metric::after,
     .case-pager-link::after {
         display: none;
+    }
+
+    /* The engine already draws a single static frame under reduced motion.
+       Stepping the layer back further keeps that frame from reading as
+       visual noise for a reader who asked for less of it. */
+    .molecular-background {
+        opacity: 0.3;
     }
 }

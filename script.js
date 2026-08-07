@@ -1237,6 +1237,7 @@
         var lastTimestamp = 0;
         var isOnScreen = true;
         var builtForCount = -1;
+        var isBackground = canvas.dataset.background === "true";
 
         /* ---------- Build ---------- */
 
@@ -1604,13 +1605,22 @@
                 return false;
             }
 
-            var devicePixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+            // A full-viewport background covers roughly five times the area
+            // of the hero box, so it is capped lower. At the opacity this
+            // layer runs at, the difference is not visible, and it keeps the
+            // per-frame fill cost close to the original.
+            var maximumRatio = isBackground ? 1.5 : 2;
+            var devicePixelRatio = Math.min(
+                window.devicePixelRatio || 1,
+                maximumRatio
+            );
 
             cssWidth = bounds.width;
             cssHeight = bounds.height;
             centreX = cssWidth / 2;
             centreY = cssHeight / 2;
-            projectionScale = Math.min(cssWidth, cssHeight) * 0.34;
+            projectionScale =
+                Math.min(cssWidth, cssHeight) * (isBackground ? 0.40 : 0.34);
 
             canvas.width = Math.round(cssWidth * devicePixelRatio);
             canvas.height = Math.round(cssHeight * devicePixelRatio);
@@ -1910,7 +1920,10 @@
             }
         });
 
-        if (supportsIntersectionObserver()) {
+        // A fixed background layer never leaves the viewport, so the
+        // scroll-based pause below does not apply to it. Pausing on a hidden
+        // tab still does, and that is the case that matters for battery.
+        if (supportsIntersectionObserver() && !isBackground) {
             var visibilityObserver = new IntersectionObserver(
                 function (entries) {
                     isOnScreen = entries[0].isIntersecting;

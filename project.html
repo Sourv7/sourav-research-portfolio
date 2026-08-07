@@ -68,6 +68,16 @@
         <span class="ambient-grid"></span>
         <span class="ambient-orb ambient-orb-one"></span>
         <span class="ambient-orb ambient-orb-two"></span>
+
+        <!-- The molecular network, drawn across the whole viewport behind the
+             content. Still one canvas and one loop: script.js instantiates
+             the same engine, and data-background tells it to trade some
+             resolution for the much larger fill area. -->
+        <canvas
+            id="molecular-canvas"
+            class="molecular-canvas molecular-background"
+            data-background="true"
+        ></canvas>
     </div>
 
     <header>
@@ -116,15 +126,6 @@
                 </li>
             </ol>
         </nav>
-
-        <!-- The same molecular network as the homepage hero, drawn by the
-             existing engine in script.js. One canvas, one loop, no second
-             scene: script.js only instantiates it when this element is
-             present, and it stops when the tab is hidden or the band scrolls
-             out of view. -->
-        <div class="case-visual" aria-hidden="true">
-            <canvas id="molecular-canvas" class="molecular-canvas"></canvas>
-        </div>
 
         <!-- Populated by project.js. Hidden until a project resolves, so a
              failed lookup never flashes an empty case study. -->
