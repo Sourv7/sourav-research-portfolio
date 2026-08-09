@@ -38,18 +38,27 @@
         property="og:url"
         content="https://sourav-research-portfolio.vercel.app/"
     >
+    <meta property="og:image" content="https://sourav-research-portfolio.vercel.app/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Sourav Chandra — building AI systems for biological discovery">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta
         name="twitter:title"
         content="Sourav Chandra | AI &amp; Bioinformatics Researcher"
     >
+    <meta name="twitter:image" content="https://sourav-research-portfolio.vercel.app/og-image.png">
     <meta
         name="twitter:description"
         content="AI and bioinformatics researcher working on protein-peptide interactions, drug discovery, and computational biology."
     >
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
 
     <link rel="stylesheet" href="styles.css">
     <script src="project-data.js" defer></script>
@@ -71,9 +80,19 @@
             "addressLocality": "Jeonju",
             "addressCountry": "KR"
         },
-        "sameAs": ["https://github.com/Sourv7"]
+        "sameAs": [
+            "https://github.com/Sourv7",
+            "https://orcid.org/0009-0005-2371-8482"
+        ]
     }
     </script>
+
+    <!-- Vercel Web Analytics and Speed Insights. Cookie-free and with no
+         cross-site tracking, so no consent banner is required. Both must be
+         switched on in the Vercel dashboard before they report anything;
+         until then the requests simply 404 and nothing else is affected. -->
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 
 <body>
@@ -367,7 +386,7 @@
                     The publication list is rendered with JavaScript. With
                     JavaScript turned off, the full record is available on
                     <a
-                        href="https://orcid.org/"
+                        href="https://orcid.org/0009-0005-2371-8482"
                         target="_blank"
                         rel="noopener noreferrer"
                     >ORCID</a>.
@@ -383,15 +402,141 @@
                 projects, and computational biology opportunities.
             </p>
 
-            <p>Location: Jeonju, Republic of Korea</p>
+            <p class="contact-location">Jeonju, Republic of Korea</p>
 
-            <a
-                href="https://github.com/Sourv7"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                Contact me through GitHub
-            </a>
+            <div class="contact-grid">
+                <div class="contact-form-panel">
+                    <h3>Send a message</h3>
+
+                    <form id="contact-form" class="contact-form" novalidate>
+                        <div class="field">
+                            <label for="contact-name">Name</label>
+                            <input
+                                id="contact-name"
+                                name="name"
+                                type="text"
+                                autocomplete="name"
+                                maxlength="120"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="contact-email">Email</label>
+                            <input
+                                id="contact-email"
+                                name="email"
+                                type="email"
+                                autocomplete="email"
+                                maxlength="254"
+                                required
+                            >
+                        </div>
+
+                        <div class="field">
+                            <label for="contact-message">Message</label>
+                            <textarea
+                                id="contact-message"
+                                name="message"
+                                rows="5"
+                                maxlength="5000"
+                                required
+                            ></textarea>
+                        </div>
+
+                        <!-- Honeypot. Hidden from sight and from assistive
+                             technology; only an automated submitter fills it. -->
+                        <div class="field field-decoy" aria-hidden="true">
+                            <label for="contact-website">Website</label>
+                            <input
+                                id="contact-website"
+                                name="website"
+                                type="text"
+                                tabindex="-1"
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <button class="button button-primary" type="submit">
+                            Send message
+                        </button>
+
+                        <p
+                            class="contact-status"
+                            id="contact-status"
+                            role="status"
+                            aria-live="polite"
+                        ></p>
+                    </form>
+
+                    <noscript>
+                        <p class="contact-noscript">
+                            The message form needs JavaScript. Please reach me
+                            through the profile links instead.
+                        </p>
+                    </noscript>
+                </div>
+
+                <div class="contact-profiles">
+                    <h3>Profiles</h3>
+
+                    <ul class="profile-list">
+                        <li>
+                            <a
+                                href="https://orcid.org/0009-0005-2371-8482"
+                                target="_blank"
+                                rel="noopener noreferrer me"
+                            >
+                                <span class="profile-name">ORCID</span>
+                                <span class="profile-detail">0009-0005-2371-8482</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a
+                                href="https://github.com/Sourv7"
+                                target="_blank"
+                                rel="noopener noreferrer me"
+                            >
+                                <span class="profile-name">GitHub</span>
+                                <span class="profile-detail">Sourv7</span>
+                            </a>
+                        </li>
+
+                        <!--
+                        Add these once you have the URLs. Left commented rather
+                        than pointing at a placeholder, so the page never ships
+                        a dead link.
+
+                        <li>
+                            <a href="https://scholar.google.com/citations?user=YOUR_ID"
+                               target="_blank" rel="noopener noreferrer me">
+                                <span class="profile-name">Google Scholar</span>
+                                <span class="profile-detail">Citations and metrics</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="https://www.linkedin.com/in/YOUR_HANDLE"
+                               target="_blank" rel="noopener noreferrer me">
+                                <span class="profile-name">LinkedIn</span>
+                                <span class="profile-detail">Professional profile</span>
+                            </a>
+                        </li>
+                        -->
+                    </ul>
+
+                    <!--
+                    CV download. Uncomment after adding cv.pdf to the repository
+                    root, and update the date.
+
+                    <a class="button button-secondary cv-button" href="/cv.pdf"
+                       target="_blank" rel="noopener noreferrer">
+                        Download CV (PDF)
+                    </a>
+                    -->
+                </div>
+            </div>
         </section>
     </main>
 

@@ -1,0 +1,27 @@
+{
+  "name": "Sourav Chandra | AI & Bioinformatics Researcher",
+  "short_name": "S. Chandra",
+  "description": "Research portfolio covering artificial intelligence, bioinformatics, computational biology, and drug discovery.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

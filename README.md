@@ -182,6 +182,63 @@ statistics above them.
 Optional fields must be left out entirely rather than set to an empty string;
 the detail line is only rendered when at least one of them is present.
 
+## Contact form
+
+The form posts to `/api/contact`, a Vercel serverless function. No build step
+and no `package.json` are needed — dropping the file in `/api` is enough.
+
+Set three environment variables in the Vercel dashboard under
+**Settings → Environment Variables**, for every environment:
+
+| Variable | Value |
+| --- | --- |
+| `RESEND_API_KEY` | An API key from [resend.com](https://resend.com) (free tier is enough) |
+| `CONTACT_TO` | The address that receives messages |
+| `CONTACT_FROM` | A verified sender. `onboarding@resend.dev` works for testing |
+
+Until they are set, the endpoint returns 503 and the form tells the visitor to
+use the profile links instead, so nothing is lost silently.
+
+The recipient address exists only in the environment variables, never in the
+page, so it is not exposed to scrapers. Submissions are filtered by a honeypot
+field, server-side validation, and a short per-address rate limit.
+
+## Academic profiles and CV
+
+Profile links live in the contact section of `index.html`. ORCID and GitHub
+are live. Google Scholar, LinkedIn, and the CV download are present but
+commented out, deliberately: a placeholder link is worse than no link.
+
+To enable them:
+
+1. **Google Scholar / LinkedIn** — uncomment the block in the contact section
+   and replace `YOUR_ID` / `YOUR_HANDLE`.
+2. **CV** — add `cv.pdf` to the repository root, then uncomment the CV button.
+   Check the file is free of phone numbers, home addresses, and anything else
+   you would not publish on a public page.
+
+## SEO
+
+- `sitemap.xml` lists the homepage and all five case studies. Regenerate it
+  when you add a project.
+- `robots.txt` allows everything and points at the sitemap.
+- `og-image.png` (1200×630) is generated from the site's own design tokens.
+- Favicons, an Apple touch icon, and `site.webmanifest` are in the root.
+- Case-study pages rewrite title, description, canonical, and Open Graph tags
+  per project, and emit `ScholarlyArticle` JSON-LD only where a publication
+  exists.
+
+After deploying, submit the sitemap in Google Search Console and request
+indexing for the homepage.
+
+## Analytics
+
+Vercel Web Analytics and Speed Insights are loaded from `/_vercel/`. Both are
+cookie-free and do no cross-site tracking, so no consent banner is required.
+They must be switched on in the Vercel dashboard under **Analytics** and
+**Speed Insights**; until then the script requests 404 harmlessly.
+
+
 ## Accessibility
 
 - Semantic landmarks (`header`, `nav`, `main`, `footer`) and a single `<h1>`
@@ -278,8 +335,7 @@ Then open <http://localhost:8000>.
 
 ## Planned Improvements
 
-- Case-study preview images and Open Graph images per project
-- Contact form
+- Per-project Open Graph images
+- Google Scholar and LinkedIn profile links
+- CV download
 - Dark-mode option
-- Open Graph preview image
-- ORCID link for the publication record

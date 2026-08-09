@@ -1947,6 +1947,126 @@
         initialise();
     }
 
+    /* ====================================================================
+       11. Contact form
+       ====================================================================
+       Progressive enhancement over a plain form: submitted with fetch, with
+       validation messages announced through a polite live region. The
+       recipient address lives only in the serverless function, so it is never
+       exposed to scrapers.
+       ==================================================================== */
+
+    function setUpContactForm() {
+        var form = document.querySelector("#contact-form");
+        var status = document.querySelector("#contact-status");
+
+        if (!form || !status) {
+            return;
+        }
+
+        var submitButton = form.querySelector('button[type="submit"]');
+        var isSending = false;
+
+        function report(message, state) {
+            status.textContent = message;
+            status.dataset.state = state;
+        }
+
+        function firstProblem(values) {
+            if (!values.name) {
+                return { message: "Please add your name.", field: "#contact-name" };
+            }
+
+            if (!values.email) {
+                return { message: "Please add your email address.", field: "#contact-email" };
+            }
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email)) {
+                return {
+                    message: "That email address does not look right.",
+                    field: "#contact-email"
+                };
+            }
+
+            if (values.message.length < 10) {
+                return {
+                    message: "Please write a little more so I can reply usefully.",
+                    field: "#contact-message"
+                };
+            }
+
+            return null;
+        }
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            if (isSending) {
+                return;
+            }
+
+            var values = {
+                name: form.elements.name.value.trim(),
+                email: form.elements.email.value.trim(),
+                message: form.elements.message.value.trim(),
+                website: form.elements.website.value.trim()
+            };
+
+            var problem = firstProblem(values);
+
+            if (problem) {
+                report(problem.message, "error");
+
+                var field = document.querySelector(problem.field);
+                if (field) {
+                    field.focus();
+                }
+
+                return;
+            }
+
+            isSending = true;
+            submitButton.disabled = true;
+            report("Sending…", "pending");
+
+            window.fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(values)
+            })
+                .then(function (response) {
+                    return response.json().then(function (payload) {
+                        return { ok: response.ok, payload: payload };
+                    });
+                })
+                .then(function (result) {
+                    if (!result.ok) {
+                        report(
+                            result.payload.error ||
+                                "The message could not be sent. Please try GitHub instead.",
+                            "error"
+                        );
+                        return;
+                    }
+
+                    form.reset();
+                    report("Thank you. Your message has been sent.", "success");
+                })
+                .catch(function () {
+                    report(
+                        "The message could not be sent. Please check your connection, or reach me through the profile links.",
+                        "error"
+                    );
+                })
+                .then(function () {
+                    isSending = false;
+                    submitButton.disabled = false;
+                });
+        });
+    }
+
+    setUpContactForm();
+
     var molecularCanvas = document.querySelector("#molecular-canvas");
 
     if (molecularCanvas) {

@@ -1150,6 +1150,208 @@ a:focus-visible .project-arrow {
     outline-color: #ffffff;
 }
 
+
+/* ---------- Contact layout ---------- */
+
+.contact-location {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
+    gap: 32px;
+    margin-top: 32px;
+    align-items: start;
+}
+
+#contact h3 {
+    margin-bottom: 18px;
+    color: #ffffff;
+    font-size: 1.05rem;
+}
+
+/* ---------- Form ---------- */
+
+.contact-form .field {
+    margin-bottom: 16px;
+}
+
+.contact-form label {
+    display: block;
+    margin-bottom: 6px;
+
+    color: #e2e8f0;
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 14px;
+
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: var(--border-radius-small);
+
+    font: inherit;
+    font-size: 0.95rem;
+
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+.contact-form textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: #94a3b8;
+}
+
+.contact-form input:hover,
+.contact-form textarea:hover {
+    border-color: rgba(255, 255, 255, 0.32);
+}
+
+.contact-form input:focus-visible,
+.contact-form textarea:focus-visible {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: #ffffff;
+    outline: 3px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* The button on the dark panel needs its own light treatment. */
+.contact-form button[type="submit"] {
+    margin-top: 4px;
+    background: #ffffff;
+    color: var(--color-heading);
+    border-color: #ffffff;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.contact-form button[type="submit"]:hover,
+.contact-form button[type="submit"]:focus-visible {
+    background: #e2e8f0;
+    border-color: #e2e8f0;
+    color: var(--color-heading);
+}
+
+.contact-form button[type="submit"]:disabled {
+    cursor: progress;
+    opacity: 0.7;
+    transform: none;
+}
+
+/* Off-screen rather than display:none, so a bot that reads the DOM still
+   sees a fillable field while nobody else ever encounters it. */
+.field-decoy {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/* Status is a sentence, never a bare colour change. */
+.contact-status {
+    margin-top: 14px;
+    min-height: 1.4em;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.contact-status[data-state="error"] {
+    color: #fca5a5;
+}
+
+.contact-status[data-state="success"] {
+    color: #86efac;
+}
+
+.contact-status[data-state="pending"] {
+    color: #cbd5e1;
+}
+
+.contact-noscript {
+    margin-top: 12px;
+    color: #cbd5e1;
+    font-size: 0.9rem;
+}
+
+/* ---------- Profiles ---------- */
+
+.profile-list {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+}
+
+/* Overrides the blue button styling #contact a otherwise inherits. */
+#contact .profile-list a {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    margin-top: 0;
+    padding: 14px 18px;
+
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: var(--border-radius-small);
+
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+#contact .profile-list a:hover,
+#contact .profile-list a:focus-visible {
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.34);
+    transform: translateY(-2px);
+}
+
+.profile-name {
+    font-weight: 800;
+}
+
+.profile-detail {
+    color: #cbd5e1;
+    font-size: 0.82rem;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+#contact .cv-button {
+    display: inline-block;
+    margin-top: 16px;
+    background: transparent;
+    color: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+#contact .cv-button:hover,
+#contact .cv-button:focus-visible {
+    background: #ffffff;
+    color: var(--color-heading);
+    border-color: #ffffff;
+}
+
 /* ==========================================================================
    Footer
    ========================================================================== */
@@ -1348,6 +1550,11 @@ footer {
     #about {
         width: calc(100% - 24px);
     }
+
+    .contact-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 28px;
+    }
 }
 
 @media (max-width: 400px) {
@@ -1410,5 +1617,10 @@ footer {
     .project-arrow,
     .case-arrow {
         transform: none !important;
+    }
+
+    #contact .profile-list a:hover,
+    #contact .profile-list a:focus-visible {
+        transform: none;
     }
 }

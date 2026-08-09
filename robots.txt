@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The case studies are query-string URLs; make sure they are crawlable.
+Allow: /project.html
+
+Sitemap: https://sourav-research-portfolio.vercel.app/sitemap.xml
