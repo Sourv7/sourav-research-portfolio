@@ -507,16 +507,23 @@ main > section {
    Expertise
    ========================================================================== */
 
+.expertise-intro {
+    max-width: 720px;
+    margin-bottom: 28px;
+    font-size: 1.04rem;
+}
+
 .expertise-list {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
     gap: 16px;
     list-style: none;
 }
 
 .expertise-list li {
     position: relative;
-    padding: 18px 20px 18px 48px;
+    min-width: 0;
+    padding: 22px 24px 22px 48px;
 
     background: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -533,9 +540,21 @@ main > section {
     box-shadow: var(--shadow-medium);
 }
 
+.expertise-list li h3 {
+    margin-bottom: 8px;
+    font-size: 1.02rem;
+    letter-spacing: -0.01em;
+}
+
+.expertise-list li p {
+    color: var(--color-text);
+    font-size: 0.92rem;
+    line-height: 1.62;
+}
+
 .expertise-list li::before {
     position: absolute;
-    top: 26px;
+    top: 30px;
     left: 22px;
 
     width: 10px;
@@ -548,6 +567,75 @@ main > section {
     );
     border-radius: 50%;
     content: "";
+}
+
+
+/* ---------- Technical toolkit ---------- */
+
+.toolkit {
+    margin-top: 36px;
+    padding: 26px 28px;
+
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-small);
+}
+
+.toolkit > h3 {
+    margin-bottom: 18px;
+
+    color: var(--color-text-muted);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.toolkit-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.toolkit-row {
+    display: grid;
+    grid-template-columns: minmax(0, 190px) minmax(0, 1fr);
+    gap: 8px 20px;
+    align-items: baseline;
+}
+
+.toolkit-row dt {
+    color: var(--color-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.toolkit-row dd {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    overflow-wrap: break-word;
+}
+
+@media (max-width: 620px) {
+    .toolkit-row {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2px;
+    }
+}
+
+/* ---------- About ---------- */
+
+.about-lead {
+    margin-bottom: 18px;
+    color: var(--color-heading);
+    font-size: 1.22rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+#about p + p {
+    margin-top: 16px;
 }
 
 /* ==========================================================================

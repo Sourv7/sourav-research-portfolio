@@ -976,7 +976,8 @@
     function setUpScrollReveal() {
         var revealTargets = toArray(
             document.querySelectorAll(
-                "#about, #expertise h2, .expertise-list li, " +
+                "#about, #expertise h2, .expertise-intro, " +
+                    ".expertise-list li, .toolkit, " +
                     "#projects h2, .project-filters, .project-card, " +
                     "#publications h2, .publications-intro, " +
                     ".publication-stats, .publication-filters, " +

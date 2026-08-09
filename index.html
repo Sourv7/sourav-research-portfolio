@@ -105,6 +105,24 @@
         "name": "Sourav Chandra",
         "url": "https://sourav-research-portfolio.vercel.app/",
         "jobTitle": "AI Researcher and Bioinformatician",
+        "description": "Integrated Ph.D. researcher building computational biology pipelines for molecular dynamics, molecular docking, protein-peptide prediction, and AI-assisted drug discovery.",
+        "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": "Kathmandu University",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "NP"
+            }
+        },
+        "knowsAbout": [
+            "Molecular dynamics simulation",
+            "Molecular docking",
+            "Protein language models",
+            "Structural bioinformatics",
+            "Computer-aided drug discovery",
+            "Network pharmacology",
+            "High-performance computing"
+        ],
         "affiliation": {
             "@type": "CollegeOrUniversity",
             "name": "Jeonbuk National University"
@@ -195,10 +213,14 @@
                     <h1>Building AI systems for biological discovery</h1>
 
                     <p class="hero-summary">
-                        I develop machine-learning and computational biology
-                        solutions for protein-peptide interactions, drug
-                        discovery, structural bioinformatics, and biomedical
-                        research.
+                        I am an integrated Ph.D. researcher at Jeonbuk
+                        National University, building computational biology
+                        pipelines that combine molecular dynamics, molecular
+                        docking, and protein language models. My work runs on
+                        Linux HPC clusters and spans protein–peptide
+                        interaction prediction, de novo protein design, and
+                        AI-assisted drug discovery, with eight research
+                        outputs published to date.
                     </p>
 
                     <div class="hero-actions">
@@ -232,28 +254,158 @@
         <section id="about">
             <h2>About Me</h2>
 
+            <p class="about-lead">
+                I build and run computational pipelines that answer
+                biological questions: how a peptide binds a protein, whether
+                a variant destabilises a domain, which compound is worth
+                taking into the laboratory.
+            </p>
+
             <p>
                 I am an integrated Ph.D. researcher in Electronics and
-                Information Engineering at Jeonbuk National University,
-                South Korea. My work combines artificial intelligence,
-                bioinformatics, computational biology, and drug
-                discovery.
+                Information Engineering at Jeonbuk National University, South
+                Korea, where I have worked since 2023. Before that I read
+                Biotechnology at Kathmandu University in Nepal, and that
+                combination is what shapes the work: enough biology to know
+                which question matters, and enough engineering to build the
+                pipeline that answers it.
+            </p>
+
+            <p>
+                Day to day this means GROMACS molecular dynamics, molecular
+                docking, MM/PBSA binding-energy analysis, and transformer
+                models for protein–peptide prediction, all on Linux HPC
+                clusters with GPU computing and SLURM. A large part of the
+                job is diagnosis rather than simulation: finding topology,
+                force-field, preprocessing, and trajectory-imaging faults
+                before committing cluster time to a run that was never going
+                to be valid.
+            </p>
+
+            <p>
+                My published work covers network pharmacology for non-small
+                cell lung cancer, AI-assisted JAK2 inhibitor discovery,
+                antimicrobial screening of cyanobacterial extracts, and
+                immunoinformatic vaccine design. Current projects include de
+                novo ligand-binding protein design and ProPepX, a
+                transformer-based protein–peptide prediction framework with
+                explainable-AI components.
+            </p>
+
+            <p>
+                I am open to research collaborations, computational biology
+                consulting, and positions where the modelling has to be
+                correct rather than merely finished.
             </p>
         </section>
 
         <section id="expertise">
             <h2>Research Expertise</h2>
 
+            <p class="expertise-intro">
+                Five areas where I have built pipelines end to end, rather
+                than run someone else's.
+            </p>
+
             <ul class="expertise-list">
-                <li>Artificial intelligence and deep learning</li>
-                <li>Bioinformatics and computational biology</li>
-                <li>Protein-peptide interaction prediction</li>
-                <li>Computer-aided drug discovery</li>
                 <li>
-                    Molecular docking and molecular dynamics simulation
+                    <h3>Molecular dynamics</h3>
+                    <p>
+                        GROMACS from setup to production: energy
+                        minimisation, NVT and NPT equilibration, production
+                        runs, checkpoint recovery, and trajectory quality
+                        control. I treat a simulation as valid only once the
+                        preprocessing has been checked, not once it has
+                        finished.
+                    </p>
                 </li>
-                <li>Interpretable machine learning</li>
+
+                <li>
+                    <h3>Trajectory analysis</h3>
+                    <p>
+                        RMSD, RMSF, radius of gyration, SASA, hydrogen-bond
+                        and contact analysis, clustering, principal-component
+                        analysis, and periodic-boundary correction.
+                        Comparative analysis across wild type and variant
+                        ensembles, as in the STAT3 SH2-domain study.
+                    </p>
+                </li>
+
+                <li>
+                    <h3>Molecular modelling and docking</h3>
+                    <p>
+                        AutoDock Vina and Schrödinger Glide, MM/PBSA
+                        binding-energy integration, and comparative
+                        structural analysis. A good share of the work is
+                        topology and force-field troubleshooting, which is
+                        where most docking-to-dynamics handoffs actually
+                        fail.
+                    </p>
+                </li>
+
+                <li>
+                    <h3>Protein AI and design</h3>
+                    <p>
+                        Protein language models including ESM-2 and ProtTrans
+                        for residue-level prediction, with cross-attention
+                        and multitask architectures in PyTorch. De novo
+                        design pipelines chaining RFdiffusion, ProteinMPNN,
+                        and ColabFold through to docking and simulation.
+                    </p>
+                </li>
+
+                <li>
+                    <h3>Computational drug discovery</h3>
+                    <p>
+                        Network pharmacology, target and pathway enrichment,
+                        virtual screening, and ADMET evaluation — the
+                        workflow behind the published Nigella sativa NSCLC
+                        study and the JAK2 inhibitor work.
+                    </p>
+                </li>
+
+                <li>
+                    <h3>Reproducible HPC workflows</h3>
+                    <p>
+                        Python and Bash automation on Linux clusters with
+                        SLURM, GPU computing, and parallel processing;
+                        environments pinned with Conda and Docker and tracked
+                        in Git, so a result can be regenerated rather than
+                        remembered.
+                    </p>
+                </li>
             </ul>
+
+            <div class="toolkit">
+                <h3>Technical toolkit</h3>
+
+                <dl class="toolkit-grid">
+                    <div class="toolkit-row">
+                        <dt>Programming</dt>
+                        <dd>Python · Bash · SQL · Linux shell</dd>
+                    </div>
+
+                    <div class="toolkit-row">
+                        <dt>Scientific computing</dt>
+                        <dd>NumPy · Pandas · Biopython · scikit-learn · PyTorch · TensorFlow</dd>
+                    </div>
+
+                    <div class="toolkit-row">
+                        <dt>Molecular modelling</dt>
+                        <dd>GROMACS · AutoDock Vina · Schrödinger Glide · MM/PBSA</dd>
+                    </div>
+
+                    <div class="toolkit-row">
+                        <dt>Protein AI</dt>
+                        <dd>ESM · ProtTrans · AlphaFold · ColabFold · RFdiffusion · ProteinMPNN</dd>
+                    </div>
+
+                    <div class="toolkit-row">
+                        <dt>Infrastructure</dt>
+                        <dd>Linux HPC · SLURM · GPU computing · Git · Docker · Conda</dd>
+                    </div>
+                </dl>
+            </div>
         </section>
 
         <section id="projects">
