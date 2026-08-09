@@ -8,35 +8,32 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <!-- Title, description, canonical, and Open Graph values are replaced by
-         project.js once the requested project has been resolved. The values
-         here are the fallback for an unknown or missing id. -->
-    <title>Research Project | Sourav Chandra</title>
+    <title>Page not found | Sourav Chandra</title>
 
     <meta
         name="description"
-        content="Detailed research case studies by Sourav Chandra, covering computational drug discovery, protein-peptide deep learning, structural bioinformatics, and interpretable machine learning."
+        content="Portfolio of Sourav Chandra, an AI and bioinformatics researcher specializing in computational biology, drug discovery, and protein-peptide interactions."
     >
 
     <meta name="author" content="Sourav Chandra">
     <meta name="theme-color" content="#0f172a">
 
-    <link
-        rel="canonical"
-        href="https://sourav-research-portfolio.vercel.app/project.html"
-    >
+    <meta name="robots" content="noindex, follow">
 
     <!-- Open Graph -->
-    <meta property="og:type" content="article">
+    <meta property="og:type" content="website">
     <meta property="og:site_name" content="Sourav Chandra">
-    <meta property="og:title" content="Research Project | Sourav Chandra">
+    <meta
+        property="og:title"
+        content="Sourav Chandra | AI &amp; Bioinformatics Researcher"
+    >
     <meta
         property="og:description"
-        content="Detailed research case studies by Sourav Chandra."
+        content="AI and bioinformatics researcher working on protein-peptide interactions, drug discovery, and computational biology."
     >
     <meta
         property="og:url"
-        content="https://sourav-research-portfolio.vercel.app/project.html"
+        content="https://sourav-research-portfolio.vercel.app/"
     >
     <meta property="og:image" content="https://sourav-research-portfolio.vercel.app/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -46,11 +43,14 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Research Project | Sourav Chandra">
+    <meta
+        name="twitter:title"
+        content="Sourav Chandra | AI &amp; Bioinformatics Researcher"
+    >
     <meta name="twitter:image" content="https://sourav-research-portfolio.vercel.app/og-image.png">
     <meta
         name="twitter:description"
-        content="Detailed research case studies by Sourav Chandra."
+        content="AI and bioinformatics researcher working on protein-peptide interactions, drug discovery, and computational biology."
     >
 
     <!-- Inter. styles.css asks for it, so it has to actually load: without
@@ -92,14 +92,8 @@
     <link rel="manifest" href="/site.webmanifest">
 
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="project.css">
-
-    <!-- Order matters: the data loads first, project.js builds the case
-         study, and script.js then picks up the finished sections for scroll
-         reveal and card tilt. All three are deferred, so they run in order. -->
-    <script src="project-data.js" defer></script>
-    <script src="project.js" defer></script>
     <script src="script.js" defer></script>
+
 
     <!-- Vercel Web Analytics and Speed Insights. Cookie-free and with no
          cross-site tracking, so no consent banner is required. Both must be
@@ -109,30 +103,18 @@
     <script defer src="/_vercel/speed-insights/script.js"></script>
 </head>
 
-<body class="case-page">
+<body>
     <a class="skip-link" href="#main-content">Skip to main content</a>
 
-    <!-- Ambient background, decorative only. The same visual language as the
-         homepage, without a second animation loop. -->
     <div class="ambient-layer" aria-hidden="true">
         <span class="ambient-grid"></span>
         <span class="ambient-orb ambient-orb-one"></span>
         <span class="ambient-orb ambient-orb-two"></span>
-
-        <!-- The molecular network, drawn across the whole viewport behind the
-             content. Still one canvas and one loop: script.js instantiates
-             the same engine, and data-background tells it to trade some
-             resolution for the much larger fill area. -->
-        <canvas
-            id="molecular-canvas"
-            class="molecular-canvas molecular-background"
-            data-background="true"
-        ></canvas>
     </div>
 
     <header>
         <nav aria-label="Primary navigation">
-            <a class="nav-brand" href="index.html">Sourav Chandra</a>
+            <a class="nav-brand" href="/">Sourav Chandra</a>
 
             <button
                 class="theme-toggle"
@@ -162,69 +144,49 @@
             </button>
 
             <ul id="primary-menu">
-                <li><a class="nav-link" href="index.html#about">About</a></li>
-                <li><a class="nav-link" href="index.html#expertise">Expertise</a></li>
+                <li><a class="nav-link" href="/#about">About</a></li>
+                <li><a class="nav-link" href="/#expertise">Expertise</a></li>
+                <li><a class="nav-link" href="/#projects">Projects</a></li>
                 <li>
-                    <a class="nav-link is-active" href="index.html#projects">
-                        Projects
-                    </a>
-                </li>
-                <li>
-                    <a class="nav-link" href="index.html#publications">
+                    <a class="nav-link" href="/#publications">
                         Publications
                     </a>
                 </li>
-                <li><a class="nav-link" href="index.html#contact">Contact</a></li>
+                <li><a class="nav-link" href="/#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
     <main id="main-content" tabindex="-1">
-        <nav class="breadcrumb" aria-label="Breadcrumb">
-            <ol>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="index.html#projects">Projects</a></li>
-                <li>
-                    <span id="breadcrumb-current" aria-current="page">
-                        Project
-                    </span>
-                </li>
-            </ol>
-        </nav>
+        <section class="error-page">
+            <p class="error-code" aria-hidden="true">404</p>
 
-        <!-- Populated by project.js. Hidden until a project resolves, so a
-             failed lookup never flashes an empty case study. -->
-        <article id="case-study" class="case-study" hidden></article>
-
-        <section id="project-not-found" class="case-not-found" hidden>
-            <h1>Project not found</h1>
-
-            <p id="not-found-detail">
-                The project you are looking for does not exist.
-            </p>
+            <h1>This page does not exist</h1>
 
             <p>
-                It may have been renamed, or the link may be incomplete.
-                All available case studies are listed on the homepage.
+                The address may be mistyped, or the page may have been moved
+                or renamed. Nothing is broken on your side.
             </p>
 
-            <a class="button button-primary" href="index.html#projects">
-                Back to all projects
-            </a>
+            <div class="error-actions">
+                <a class="button button-primary" href="/">Go to the homepage</a>
+                <a class="button button-secondary" href="/#projects">
+                    Browse the projects
+                </a>
+            </div>
+
+            <nav class="error-links" aria-label="Main sections">
+                <h2>Or jump straight to</h2>
+
+                <ul>
+                    <li><a href="/#about">About</a></li>
+                    <li><a href="/#expertise">Research expertise</a></li>
+                    <li><a href="/#projects">Selected projects</a></li>
+                    <li><a href="/#publications">Research publications</a></li>
+                    <li><a href="/#contact">Contact</a></li>
+                </ul>
+            </nav>
         </section>
-
-        <p class="case-back">
-            <a href="index.html#projects">Back to all projects</a>
-        </p>
-
-        <noscript>
-            <p class="case-noscript">
-                Case studies are generated from structured project data with
-                JavaScript. With JavaScript turned off, the project list and
-                repository links remain available on the
-                <a href="index.html#projects">homepage</a>.
-            </p>
-        </noscript>
     </main>
 
     <footer>

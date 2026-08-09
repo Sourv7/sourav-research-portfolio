@@ -385,7 +385,14 @@
         }
 
         if (project.image) {
-            setMeta('meta[property="og:image"]', SITE_ORIGIN + "/" + project.image);
+            var image = SITE_ORIGIN + "/" + project.image;
+
+            setMeta('meta[property="og:image"]', image);
+            setMeta('meta[name="twitter:image"]', image);
+            setMeta(
+                'meta[property="og:image:alt"]',
+                project.shortTitle + " — research case study by Sourav Chandra"
+            );
         }
 
         // Structured data only where there is a real publication behind it.

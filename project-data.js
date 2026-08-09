@@ -27,6 +27,7 @@
 window.PORTFOLIO_PROJECTS = [
     {
         id: "nsclc-drug-discovery",
+        image: "og-nsclc-drug-discovery.png",
         // Case-study canvas: compound-target hubs with their satellites.
         visual: "network",
         accent: "primary",
@@ -139,6 +140,7 @@ window.PORTFOLIO_PROJECTS = [
 
     {
         id: "protein-peptide-multitask",
+        image: "og-protein-peptide-multitask.png",
         // Case-study canvas: two sequences with cross-attention links between them.
         visual: "duplex",
         accent: "violet",
@@ -254,6 +256,7 @@ window.PORTFOLIO_PROJECTS = [
 
     {
         id: "ppi-plm-benchmark",
+        image: "og-ppi-plm-benchmark.png",
         // Case-study canvas: parallel model layers compared under one protocol.
         visual: "stack",
         accent: "primary",
@@ -351,6 +354,7 @@ window.PORTFOLIO_PROJECTS = [
 
     {
         id: "stat3-variant-analysis",
+        image: "og-stat3-variant-analysis.png",
         // Case-study canvas: an alpha helix with marked residue positions.
         visual: "helix",
         accent: "violet",
@@ -468,6 +472,7 @@ window.PORTFOLIO_PROJECTS = [
 
     {
         id: "breast-cancer-ml",
+        image: "og-breast-cancer-ml.png",
         // Case-study canvas: two separable clusters.
         visual: "scatter",
         accent: "primary",

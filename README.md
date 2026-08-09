@@ -223,6 +223,8 @@ To enable them:
   when you add a project.
 - `robots.txt` allows everything and points at the sitemap.
 - `og-image.png` (1200×630) is generated from the site's own design tokens.
+- Each case study has its own share image, drawn with that project's structure
+  (`og-<project-id>.png`). Regenerate with `python3 make-og-images.py`.
 - Favicons, an Apple touch icon, and `site.webmanifest` are in the root.
 - Case-study pages rewrite title, description, canonical, and Open Graph tags
   per project, and emit `ScholarlyArticle` JSON-LD only where a publication
@@ -258,6 +260,46 @@ mkdir -p fonts
 
 Self-hosting also removes a connection from the critical path, so it is
 slightly faster as well as more private.
+
+
+## Dark theme
+
+The site follows the visitor's system preference, and a toggle in the header
+overrides it. The choice is stored in `localStorage`; a stored choice wins
+over the system setting.
+
+Theme resolution happens in a small inline script in `<head>`, before the
+stylesheet paints, so there is never a flash of the wrong colours. That is the
+one place an inline script earns its place, and it is why the Content Security
+Policy in `vercel.json` allows inline styles.
+
+Every dark-theme colour pair was checked against the same thresholds as the
+light theme: 4.5:1 for text, 3:1 for focus rings. Accent colours are lightened
+in dark mode because the light-theme blue is only 2.6:1 on a dark surface and
+would fail as link text.
+
+## Security and caching
+
+`vercel.json` sets a Content Security Policy, `X-Content-Type-Options`,
+`Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options`, and HSTS on every
+response.
+
+Caching is deliberately split: images and icons are immutable for a year,
+while HTML, CSS, and JavaScript must revalidate. The CSS and JS filenames are
+not fingerprinted, so pinning them would leave visitors on a stale
+`script.js` after a deploy.
+
+If you add a third-party script, widen `script-src` in the policy or the
+browser will block it silently.
+
+## Error page
+
+`404.html` is served automatically by Vercel for unknown paths. It carries the
+full navigation, is marked `noindex, follow`, and matches the site design.
+
+Note the two distinct not-found cases: an unknown **path** hits `404.html`,
+while an unknown `?id=` on `project.html` is handled inside the page by
+`project.js`.
 
 
 ## Accessibility
@@ -358,7 +400,5 @@ Then open <http://localhost:8000>.
 
 ## Planned Improvements
 
-- Per-project Open Graph images
 - Google Scholar and LinkedIn profile links
 - CV download
-- Dark-mode option

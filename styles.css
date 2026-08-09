@@ -1434,6 +1434,265 @@ footer {
     --reveal-delay: 350ms;
 }
 
+
+/* ==========================================================================
+   Dark theme
+   --------------------------------------------------------------------------
+   Applied when the visitor's system asks for dark, unless they have chosen
+   otherwise with the toggle. Both cases resolve to data-theme on <html>,
+   which script.js sets before first paint, so there is no flash of the wrong
+   theme.
+
+   Every value below was checked against the same 4.5:1 body-text and 3:1
+   non-text minimums as the light theme. The surface is lifted to #131c2e
+   rather than pure black so the shadows and borders still read.
+   ========================================================================== */
+
+[data-theme="dark"] {
+    /* Accents are lightened: the light-theme blue is only 2.6:1 on a dark
+       surface, which would fail for link text. */
+    --primary-rgb: 125, 172, 255;
+    --accent-cyan-rgb: 56, 213, 240;
+    --accent-violet-rgb: 178, 143, 255;
+
+    --color-primary-dark: #a9c8ff;
+
+    --color-heading: #f1f5f9;
+    --color-text: #cbd5e1;
+    --color-text-muted: #a3b2c7;
+    --color-background: #0b1220;
+    --color-surface: #131c2e;
+    --color-border: #26334a;
+    --color-focus: #9dc0ff;
+
+    --shadow-small: 0 4px 14px rgba(0, 0, 0, 0.40);
+    --shadow-medium: 0 10px 30px rgba(0, 0, 0, 0.48);
+    --shadow-large: 0 18px 45px rgba(0, 0, 0, 0.55);
+
+    color-scheme: dark;
+}
+
+/* --- surfaces that were hardcoded light --- */
+
+[data-theme="dark"] header {
+    background: rgba(11, 18, 32, 0.82);
+}
+
+[data-theme="dark"] .button-secondary {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="dark"] #about {
+    background: rgba(19, 28, 46, 0.75);
+}
+
+[data-theme="dark"] footer {
+    background: rgba(19, 28, 46, 0.8);
+}
+
+[data-theme="dark"] .project-status-badge {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* --- filled controls need dark text on the lightened accent --- */
+
+[data-theme="dark"] .button-primary,
+[data-theme="dark"] .filter-button.is-active {
+    color: #0b1220;
+}
+
+[data-theme="dark"] .button:hover,
+[data-theme="dark"] .button:focus-visible {
+    color: #0b1220;
+}
+
+[data-theme="dark"] .skip-link,
+[data-theme="dark"] .skip-link:focus-visible {
+    color: #0b1220;
+}
+
+/* --- the contact panel is already dark; lift it off the page --- */
+
+[data-theme="dark"] #contact {
+    background: linear-gradient(135deg, #16203a 0%, #17284a 55%, #1a2f57 100%);
+    border: 1px solid var(--color-border);
+}
+
+[data-theme="dark"] #contact a:not(.profile-list a):not(.cv-button) {
+    color: #0b1220;
+}
+
+[data-theme="dark"] .contact-form button[type="submit"] {
+    background: rgb(var(--primary-rgb));
+    border-color: rgb(var(--primary-rgb));
+    color: #0b1220;
+}
+
+[data-theme="dark"] .contact-form button[type="submit"]:hover,
+[data-theme="dark"] .contact-form button[type="submit"]:focus-visible {
+    background: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+    color: #0b1220;
+}
+
+/* --- the ambient wash is too strong on a dark page --- */
+
+[data-theme="dark"] .ambient-orb {
+    opacity: 0.5;
+}
+
+[data-theme="dark"] .ambient-grid {
+    opacity: 0.6;
+}
+
+/* --- glare highlights read as smudges on dark cards --- */
+
+[data-theme="dark"] .project-card::after,
+[data-theme="dark"] .publication-card::after {
+    background: radial-gradient(
+        260px circle at var(--glare-x, 50%) var(--glare-y, 50%),
+        rgba(var(--primary-rgb), 0.07),
+        rgba(255, 255, 255, 0) 62%
+    );
+}
+
+/* ==========================================================================
+   Theme toggle
+   ========================================================================== */
+
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+    margin-left: auto;
+
+    background: transparent;
+    color: var(--color-text);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius-pill);
+    cursor: pointer;
+
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.theme-toggle svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Only one of the two icons is ever shown. */
+.theme-toggle .icon-moon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle .icon-moon {
+    display: block;
+}
+
+/* On mobile the toggle sits beside the hamburger, before the menu opens. */
+@media (max-width: 720px) {
+    .theme-toggle {
+        margin-left: auto;
+        margin-right: 4px;
+    }
+}
+
+/* ==========================================================================
+   404
+   ========================================================================== */
+
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    min-height: 60vh;
+    justify-content: center;
+}
+
+.error-code {
+    margin-bottom: 8px;
+
+    color: rgba(var(--primary-rgb), 0.35);
+    font-size: clamp(3.5rem, 12vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+}
+
+.error-page h1 {
+    margin-bottom: 18px;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    letter-spacing: -0.03em;
+}
+
+.error-page > p {
+    max-width: 560px;
+    margin-bottom: 28px;
+    font-size: 1.06rem;
+}
+
+.error-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 44px;
+}
+
+.error-links h2 {
+    margin-bottom: 12px;
+
+    color: var(--color-text-muted);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.error-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    list-style: none;
+}
+
+.error-links a {
+    font-weight: 700;
+}
+
+@media (max-width: 720px) {
+    .error-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .error-actions .button {
+        text-align: center;
+    }
+}
+
 /* ==========================================================================
    Responsive design
    ========================================================================== */

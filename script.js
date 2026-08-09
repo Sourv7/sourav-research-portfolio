@@ -879,6 +879,64 @@
         });
     }
 
+    /**
+     * Structured data for the publication list, built from the same array as
+     * the cards so the two can never disagree. Preprints are typed as
+     * Preprint, not ScholarlyArticle: search engines should not be told that
+     * something is peer reviewed when it is not.
+     */
+    function emitPublicationStructuredData() {
+        if (!publications.length) {
+            return;
+        }
+
+        var origin = window.location.origin;
+
+        var items = publications.map(function (entry, index) {
+            var work = {
+                "@type": entry.type === "preprint"
+                    ? "Preprint"
+                    : "ScholarlyArticle",
+                headline: entry.title,
+                name: entry.title,
+                datePublished: String(entry.year),
+                identifier: "https://doi.org/" + entry.doi,
+                url: entry.url,
+                author: entry.authors.split(",").map(function (name) {
+                    return { "@type": "Person", name: name.trim() };
+                }),
+                isPartOf: {
+                    "@type": "Periodical",
+                    name: entry.source
+                }
+            };
+
+            if (entry.volume) {
+                work.volumeNumber = entry.volume;
+            }
+
+            if (entry.pages) {
+                work.pagination = entry.pages;
+            }
+
+            return { "@type": "ListItem", position: index + 1, item: work };
+        });
+
+        var script = document.createElement("script");
+
+        script.type = "application/ld+json";
+        script.textContent = JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            name: "Research publications by Sourav Chandra",
+            url: origin + "/#publications",
+            numberOfItems: publications.length,
+            itemListElement: items
+        }, null, 4);
+
+        document.head.appendChild(script);
+    }
+
     function renderPublications() {
         if (!publicationGrid) {
             return;
@@ -906,6 +964,7 @@
         });
 
         setUpPublicationStats();
+        emitPublicationStructuredData();
     }
 
     renderPublications();
@@ -2068,6 +2127,84 @@
     }
 
     setUpContactForm();
+
+    /* ====================================================================
+       12. Theme toggle
+       ====================================================================
+       The theme is already resolved by the inline script in <head>; this only
+       handles switching it. A stored choice wins over the system preference,
+       and clearing it is out of scope: the toggle is a deliberate override.
+       ==================================================================== */
+
+    function setUpThemeToggle() {
+        var toggle = document.querySelector(".theme-toggle");
+
+        if (!toggle) {
+            return;
+        }
+
+        var root = document.documentElement;
+        var themeColor = document.querySelector('meta[name="theme-color"]');
+
+        function apply(theme) {
+            root.setAttribute("data-theme", theme);
+
+            toggle.setAttribute(
+                "aria-label",
+                theme === "dark"
+                    ? "Switch to light theme"
+                    : "Switch to dark theme"
+            );
+
+            if (themeColor) {
+                themeColor.setAttribute(
+                    "content",
+                    theme === "dark" ? "#0b1220" : "#0f172a"
+                );
+            }
+        }
+
+        apply(root.getAttribute("data-theme") || "light");
+
+        toggle.addEventListener("click", function () {
+            var next =
+                root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+
+            apply(next);
+
+            try {
+                localStorage.setItem("theme", next);
+            } catch (error) {
+                // Nothing to do: the choice simply will not persist.
+            }
+        });
+
+        // Follow the system only while the visitor has not chosen for
+        // themselves.
+        if (window.matchMedia) {
+            var query = window.matchMedia("(prefers-color-scheme: dark)");
+
+            var onChange = function (event) {
+                try {
+                    if (localStorage.getItem("theme")) {
+                        return;
+                    }
+                } catch (error) {
+                    // Fall through and follow the system.
+                }
+
+                apply(event.matches ? "dark" : "light");
+            };
+
+            if (typeof query.addEventListener === "function") {
+                query.addEventListener("change", onChange);
+            } else if (typeof query.addListener === "function") {
+                query.addListener(onChange);
+            }
+        }
+    }
+
+    setUpThemeToggle();
 
     var molecularCanvas = document.querySelector("#molecular-canvas");
 

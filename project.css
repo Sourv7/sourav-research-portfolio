@@ -934,3 +934,30 @@ a:focus-visible .case-arrow {
         opacity: 0.3;
     }
 }
+
+/* ==========================================================================
+   Dark theme adjustments
+   ========================================================================== */
+
+/* Bright nodes on a dark page carry much further than dark nodes on a light
+   one, so the background layer is taken down accordingly. */
+[data-theme="dark"] .molecular-background {
+    opacity: 0.42;
+}
+
+[data-theme="dark"] .case-note {
+    background: rgba(var(--accent-violet-rgb), 0.09);
+}
+
+[data-theme="dark"] .case-section-caution .case-list {
+    background: rgba(var(--accent-violet-rgb), 0.07);
+}
+
+[data-theme="dark"] .case-metric::after,
+[data-theme="dark"] .case-pager-link::after {
+    background: radial-gradient(
+        220px circle at var(--glare-x, 50%) var(--glare-y, 50%),
+        rgba(var(--primary-rgb), 0.07),
+        rgba(255, 255, 255, 0) 62%
+    );
+}
