@@ -246,10 +246,12 @@
             actions.appendChild(caseLink);
 
             // Only rendered when a URL actually exists.
-            var external = project.githubUrl
-                ? { href: project.githubUrl, label: "GitHub repository" }
-                : project.publicationUrl
-                    ? { href: project.publicationUrl, label: "Publication" }
+            // A published paper is the stronger signal, so it wins the single
+            // card slot; the case-study page shows both regardless.
+            var external = project.publicationUrl
+                ? { href: project.publicationUrl, label: "Read the publication" }
+                : project.githubUrl
+                    ? { href: project.githubUrl, label: "GitHub repository" }
                     : null;
 
             if (external) {

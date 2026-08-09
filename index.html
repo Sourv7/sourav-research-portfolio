@@ -56,6 +56,18 @@
         content="AI and bioinformatics researcher working on protein-peptide interactions, drug discovery, and computational biology."
     >
 
+    <!-- Inter. styles.css asks for it, so it has to actually load: without
+         this, visitors fall back to their system sans-serif and none of the
+         typography is what was designed. preconnect opens the connections
+         early; display=swap paints text immediately in the fallback and
+         restyles when Inter arrives, so nothing is ever invisible. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap"
+    >
+
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/site.webmanifest">

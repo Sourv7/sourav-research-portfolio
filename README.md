@@ -3,8 +3,8 @@
 A responsive professional portfolio presenting my work in artificial
 intelligence, bioinformatics, computational biology, and drug discovery.
 
-Built as a dependency-free static site: three files, no framework, no build
-step, no package manager.
+Built as a dependency-free static site: no framework, no build step, no
+package manager.
 
 ## Live Website
 
@@ -239,6 +239,27 @@ They must be switched on in the Vercel dashboard under **Analytics** and
 **Speed Insights**; until then the script requests 404 harmlessly.
 
 
+## Fonts
+
+`styles.css` sets Inter, so both pages load it from Google Fonts with
+`preconnect` and `display=swap`. Without that link the font never arrives and
+visitors fall back to their system sans-serif.
+
+This is the site's only third-party request. Some EU institutions treat
+embedding Google Fonts as a data-protection issue, because the request exposes
+the visitor's IP address to Google. To remove it, self-host instead:
+
+```bash
+mkdir -p fonts
+# Download the four weights as woff2 from https://gwfh.mranftl.com/fonts/inter
+# then replace the Google Fonts <link> in index.html and project.html with a
+# stylesheet containing @font-face rules pointing at /fonts/.
+```
+
+Self-hosting also removes a connection from the critical path, so it is
+slightly faster as well as more private.
+
+
 ## Accessibility
 
 - Semantic landmarks (`header`, `nav`, `main`, `footer`) and a single `<h1>`
@@ -277,7 +298,9 @@ When `prefers-reduced-motion: reduce` is set:
 
 ## Performance
 
-- No frameworks, no external requests, no fonts, images, or video to download
+- No frameworks and no build step. One external request: the Inter
+  webfont from Google Fonts, loaded with `display=swap` so text paints
+  immediately in the fallback
 - The molecule is a rigid body, so bond pairs are computed **once** at build
   time; only the rotation is recalculated each frame
 - Node positions live in preallocated `Float32Array` buffers — nothing large is

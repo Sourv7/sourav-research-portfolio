@@ -122,6 +122,7 @@ window.PORTFOLIO_PROJECTS = [
             "ProTox-II", "SwissTargetPrediction", "STITCH",
             "Schrödinger Glide", "Molecular dynamics simulation"
         ],
+        githubUrl: "https://github.com/Sourv7/Non-Small-Cell--Lung-Cancer",
         publicationUrl:
             "https://www.sciencedirect.com/science/article/pii/S2212429224019564",
         doi: "10.1016/j.fbio.2024.105525",

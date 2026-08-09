@@ -56,6 +56,10 @@ body {
     position: relative;
     overflow-x: hidden;
 
+    /* Inter's default figures are proportional; tabular figures keep the
+       publication statistics and metric tiles from shifting as they count. */
+    font-feature-settings: "cv11";
+
     background: var(--color-background);
     color: var(--color-text);
     font-family:
