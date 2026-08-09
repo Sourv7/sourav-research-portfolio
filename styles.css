@@ -503,6 +503,51 @@ main > section {
     font-size: 1.08rem;
 }
 
+
+/* ---------- About layout ---------- */
+
+.about-grid {
+    display: grid;
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 36px;
+    align-items: start;
+}
+
+.about-portrait {
+    margin: 0;
+}
+
+.about-portrait img {
+    display: block;
+
+    width: 200px;
+    height: 200px;
+
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+
+    object-fit: cover;
+}
+
+.about-text {
+    min-width: 0;
+}
+
+@media (max-width: 720px) {
+    .about-grid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 22px;
+        justify-items: start;
+    }
+
+    .about-portrait img {
+        width: 140px;
+        height: 140px;
+    }
+}
+
 /* ==========================================================================
    Expertise
    ========================================================================== */
@@ -1264,122 +1309,75 @@ a:focus-visible .project-arrow {
     font-size: 1.05rem;
 }
 
-/* ---------- Form ---------- */
+/* ---------- Contact details ---------- */
 
-.contact-form .field {
-    margin-bottom: 16px;
+.contact-list {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 26px;
 }
 
-.contact-form label {
-    display: block;
-    margin-bottom: 6px;
-
-    color: #e2e8f0;
-    font-size: 0.86rem;
-    font-weight: 700;
+.contact-row {
+    display: grid;
+    grid-template-columns: minmax(0, 110px) minmax(0, 1fr);
+    gap: 4px 16px;
+    align-items: baseline;
 }
 
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    min-height: 44px;
-    padding: 11px 14px;
+.contact-row dt {
+    color: #94a3b8;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
 
-    background: rgba(255, 255, 255, 0.06);
+.contact-row dd {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1rem;
+    overflow-wrap: anywhere;
+}
+
+/* Overrides the button styling that #contact a would otherwise inherit. */
+#contact .contact-row a {
+    display: inline;
+    margin-top: 0;
+    padding: 0;
+
+    background: transparent;
     color: #ffffff;
 
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: var(--border-radius-small);
-
-    font: inherit;
-    font-size: 0.95rem;
-
-    transition:
-        background-color var(--transition-fast),
-        border-color var(--transition-fast);
+    border-radius: 0;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.4);
+    text-underline-offset: 4px;
 }
 
-.contact-form textarea {
-    min-height: 120px;
-    resize: vertical;
-}
-
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
-    color: #94a3b8;
-}
-
-.contact-form input:hover,
-.contact-form textarea:hover {
-    border-color: rgba(255, 255, 255, 0.32);
-}
-
-.contact-form input:focus-visible,
-.contact-form textarea:focus-visible {
-    background: rgba(255, 255, 255, 0.10);
-    border-color: #ffffff;
-    outline: 3px solid #ffffff;
-    outline-offset: 2px;
-}
-
-/* The button on the dark panel needs its own light treatment. */
-.contact-form button[type="submit"] {
-    margin-top: 4px;
-    background: #ffffff;
-    color: var(--color-heading);
-    border-color: #ffffff;
-    box-shadow: none;
-    cursor: pointer;
-}
-
-.contact-form button[type="submit"]:hover,
-.contact-form button[type="submit"]:focus-visible {
-    background: #e2e8f0;
-    border-color: #e2e8f0;
-    color: var(--color-heading);
-}
-
-.contact-form button[type="submit"]:disabled {
-    cursor: progress;
-    opacity: 0.7;
+#contact .contact-row a:hover,
+#contact .contact-row a:focus-visible {
+    background: transparent;
+    color: #ffffff;
+    text-decoration-color: #ffffff;
     transform: none;
 }
 
-/* Off-screen rather than display:none, so a bot that reads the DOM still
-   sees a fillable field while nobody else ever encounters it. */
-.field-decoy {
-    position: absolute;
-    left: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+#contact .contact-email-button {
+    background: #ffffff;
+    color: var(--color-heading);
 }
 
-/* Status is a sentence, never a bare colour change. */
-.contact-status {
-    margin-top: 14px;
-    min-height: 1.4em;
-
-    font-size: 0.9rem;
-    font-weight: 600;
+#contact .contact-email-button:hover,
+#contact .contact-email-button:focus-visible {
+    background: #e2e8f0;
+    color: var(--color-heading);
 }
 
-.contact-status[data-state="error"] {
-    color: #fca5a5;
-}
-
-.contact-status[data-state="success"] {
-    color: #86efac;
-}
-
-.contact-status[data-state="pending"] {
-    color: #cbd5e1;
-}
-
-.contact-noscript {
-    margin-top: 12px;
-    color: #cbd5e1;
-    font-size: 0.9rem;
+@media (max-width: 620px) {
+    .contact-row {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 /* ---------- Profiles ---------- */
@@ -1606,20 +1604,18 @@ footer {
     border: 1px solid var(--color-border);
 }
 
-[data-theme="dark"] #contact a:not(.profile-list a):not(.cv-button) {
+[data-theme="dark"] #contact a:not(.profile-list a):not(.cv-button):not(.contact-row a) {
     color: #0b1220;
 }
 
-[data-theme="dark"] .contact-form button[type="submit"] {
+[data-theme="dark"] #contact .contact-email-button {
     background: rgb(var(--primary-rgb));
-    border-color: rgb(var(--primary-rgb));
     color: #0b1220;
 }
 
-[data-theme="dark"] .contact-form button[type="submit"]:hover,
-[data-theme="dark"] .contact-form button[type="submit"]:focus-visible {
+[data-theme="dark"] #contact .contact-email-button:hover,
+[data-theme="dark"] #contact .contact-email-button:focus-visible {
     background: var(--color-primary-dark);
-    border-color: var(--color-primary-dark);
     color: #0b1220;
 }
 

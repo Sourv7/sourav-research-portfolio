@@ -182,40 +182,33 @@ statistics above them.
 Optional fields must be left out entirely rather than set to an empty string;
 the detail line is only rendered when at least one of them is present.
 
-## Contact form
+## Contact and profiles
 
-The form posts to `/api/contact`, a Vercel serverless function. No build step
-and no `package.json` are needed — dropping the file in `/api` is enough.
+The contact section lists an email address, location, and affiliation, plus
+links to ORCID, Google Scholar, ResearchGate, and GitHub. There is no form and
+no serverless function: a `mailto:` link needs no configuration and cannot
+break.
 
-Set three environment variables in the Vercel dashboard under
-**Settings → Environment Variables**, for every environment:
+The address is in the page as plain text, so it will be harvested by scrapers
+eventually. That is the accepted cost of being reachable in one click. If the
+spam becomes a problem, the options are an alias you can retire, or putting a
+form back.
 
-| Variable | Value |
-| --- | --- |
-| `RESEND_API_KEY` | An API key from [resend.com](https://resend.com) (free tier is enough) |
-| `CONTACT_TO` | The address that receives messages |
-| `CONTACT_FROM` | A verified sender. `onboarding@resend.dev` works for testing |
+LinkedIn and the CV download are present but commented out, deliberately: a
+placeholder link is worse than no link.
 
-Until they are set, the endpoint returns 503 and the form tells the visitor to
-use the profile links instead, so nothing is lost silently.
-
-The recipient address exists only in the environment variables, never in the
-page, so it is not exposed to scrapers. Submissions are filtered by a honeypot
-field, server-side validation, and a short per-address rate limit.
-
-## Academic profiles and CV
-
-Profile links live in the contact section of `index.html`. ORCID and GitHub
-are live. Google Scholar, LinkedIn, and the CV download are present but
-commented out, deliberately: a placeholder link is worse than no link.
-
-To enable them:
-
-1. **Google Scholar / LinkedIn** — uncomment the block in the contact section
-   and replace `YOUR_ID` / `YOUR_HANDLE`.
+1. **LinkedIn** — uncomment the block and replace `YOUR_HANDLE`.
 2. **CV** — add `cv.pdf` to the repository root, then uncomment the CV button.
    Check the file is free of phone numbers, home addresses, and anything else
    you would not publish on a public page.
+
+## Portrait
+
+`portrait-200` and `portrait-400` are served as WebP with a JPEG fallback
+through a `<picture>` element. The source image is 400 px, so the display size
+is capped at 200 CSS px to stay sharp on a 2x screen; upscaling would add
+weight without adding detail. `width` and `height` are set on the `<img>` so
+the surrounding text does not reflow when it loads.
 
 ## SEO
 
